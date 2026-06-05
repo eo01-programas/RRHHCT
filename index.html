@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Personal | Vista Gerencial</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #edf2f7;
+      --panel: rgba(255, 255, 255, 0.92);
+      --panel-solid: #ffffff;
+      --border: #d7dfeb;
+      --border-strong: #c7d2e2;
+      --text: #182435;
+      --muted: #617086;
+      --accent: #1d4ed8;
+      --accent-deep: #133d7a;
+      --accent-soft: #eaf1ff;
+      --header: #274e8d;
+      --shadow: 0 18px 50px rgba(16, 24, 40, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI Variable", "Segoe UI", "Aptos", "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      background:
+        radial-gradient(circle at top left, rgba(29, 78, 216, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(19, 61, 122, 0.12), transparent 24%),
+        linear-gradient(180deg, #f7f9fc 0%, var(--bg) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(8px);
+      opacity: 0.42;
+      z-index: 0;
+    }
+
+    body::before {
+      top: -120px;
+      right: -120px;
+      background: radial-gradient(circle, rgba(29, 78, 216, 0.18), rgba(29, 78, 216, 0));
+    }
+
+    body::after {
+      bottom: -140px;
+      left: -120px;
+      background: radial-gradient(circle, rgba(15, 118, 110, 0.16), rgba(15, 118, 110, 0));
+    }
+
+    .wrap {
+      max-width: 1480px;
+      margin: 0 auto;
+      padding: 26px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(199, 210, 226, 0.9);
+      border-radius: 22px;
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #0f2f5e 0%, #17438a 52%, #1d4ed8 100%);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.14);
+      box-shadow: 0 24px 60px rgba(14, 40, 86, 0.26);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -55px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .hero-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card h1 {
+      margin: 0;
+      font-size: clamp(24px, 2.2vw, 32px);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .hero-card p {
+      margin: 10px 0 0;
+      max-width: 820px;
+      color: rgba(255, 255, 255, 0.84);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+
+    .file-shell {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px dashed rgba(255, 255, 255, 0.26);
+      background: rgba(255, 255, 255, 0.09);
+      position: relative;
+      z-index: 1;
+    }
+
+    .file-shell .file-label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.74);
+    }
+
+    .button-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .button-export {
+      flex: 0 0 auto;
+      margin-left: auto;
+      padding-left: 28px;
+      border-left: 1px solid var(--border);
+    }
+
+    .button-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      flex: 1 1 auto;
+    }
+
+    .button-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
+      padding-left: 28px;
+      border-left: 1px solid var(--border);
+    }
+
+    .button-toolbar button {
+      margin-top: 0;
+      min-height: 42px;
+      padding: 10px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-radius: 14px;
+      border: 1px solid rgba(199, 210, 226, 0.95);
+      background: linear-gradient(180deg, #ffffff 0%, #f3f7fc 100%);
+      color: #31465f;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease;
+    }
+
+    .button-toolbar button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    .button-toolbar button:focus-visible,
+    input[type="file"]:focus-visible {
+      outline: 3px solid rgba(29, 78, 216, 0.2);
+      outline-offset: 2px;
+    }
+
+    .button-toolbar button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      box-shadow: none;
+    }
+
+    .button-toolbar button {
+      font-family: inherit;
+    }
+
+    .button-bar button.active {
+      background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 12px 28px rgba(29, 78, 216, 0.25);
+    }
+
+    #exportButton {
+      background: linear-gradient(135deg, #0f3b71, #1d4ed8);
+      color: #fff;
+      border-color: rgba(29, 78, 216, 0.6);
+    }
+
+    #exportButton:hover:not(:disabled) {
+      box-shadow: 0 14px 28px rgba(29, 78, 216, 0.28);
+    }
+
+    input[type="file"] {
+      display: block;
+      width: 100%;
+      color: rgba(255, 255, 255, 0.82);
+      font: inherit;
+      font-size: 13px;
+    }
+
+    input[type="file"]::file-selector-button {
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 14px;
+      margin-right: 14px;
+      background: #ffffff;
+      color: var(--accent-deep);
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(8, 15, 30, 0.16);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(8, 15, 30, 0.2);
+    }
+
+    #status {
+      margin-top: 14px;
+      white-space: pre-line;
+      color: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 14px 16px;
+      min-height: 56px;
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--panel-solid);
+      max-height: calc(100vh - 290px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      font-size: 11.5px;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: linear-gradient(135deg, var(--header), #1d4ed8);
+      color: #fff;
+      text-align: left;
+      padding: 8px 10px;
+      border-right: 1px solid rgba(255, 255, 255, 0.18);
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 10.5px;
+    }
+
+    tbody td {
+      padding: 5px 9px;
+      border-top: 1px solid #e6ebf2;
+      border-right: 1px solid #edf1f7;
+      white-space: nowrap;
+      color: #1f2a37;
+      line-height: 1.1;
+    }
+
+    tbody tr:hover td {
+      background: #f8fbff;
+    }
+
+    td.antiguedad-alert {
+      background: #fee2e2;
+      color: #b91c1c;
+      font-weight: 700;
+    }
+
+    tbody tr.dni-band-a td {
+      background: #ffffff;
+    }
+
+    tbody tr.dni-band-b td {
+      background: #f5f8fd;
+    }
+
+    .empty {
+      padding: 24px;
+      color: var(--muted);
+      text-align: center;
+      background: linear-gradient(180deg, #ffffff 0%, #fafcff 100%);
+    }
+
+    .filtered-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    #filteredTitle {
+      margin: 0;
+      color: var(--accent-deep);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    #filteredStatus {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .card + .card {
+      position: relative;
+    }
+
+    .card + .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 22px auto 22px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(199, 210, 226, 0.9), transparent);
+    }
+
+    @media (max-width: 920px) {
+      .wrap {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 16px;
+        border-radius: 18px;
+      }
+
+      .hero-header {
+        flex-direction: column;
+      }
+
+      .button-right {
+        margin-left: 0;
+        padding-left: 0;
+        border-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card hero-card">
+      <div class="hero-header">
+        <div>
+          <h1>CONTROL DE ANTIGÜEDAD</h1>
+        </div>
+      </div>
+      <label class="file-shell" for="fileInput">
+        <span class="file-label">Archivo Excel</span>
+        <input id="fileInput" type="file" accept=".xlsx,.xls" />
+      </label>
+      <div id="status"></div>
+    </div>
+
+    <div class="card">
+      <div class="button-toolbar">
+        <div class="button-bar">
+          <button id="citi01Button" disabled>CITI01</button>
+          <button id="citi02Button" disabled>CITI02</button>
+          <button id="citi03Button" disabled>CITI03</button>
+          <button id="servicioButton" disabled>SERVICIO</button>
+          <button id="empleadosButton" disabled>EMPLEADOS</button>
+        </div>
+        <div class="button-right">
+          <button id="antiguosButton" disabled>Antiguos</button>
+          <button id="exportButton" disabled>Exportar Excel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="filtered-head">
+        <p id="filteredTitle">Selecciona un botón para ver la tabla filtrada.</p>
+        <div id="filteredStatus"></div>
+      </div>
+      <div class="table-wrap" id="filteredTableWrap">
+        <div class="empty">La tabla filtrada aparecerá aquí al hacer clic en un botón.</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const status = document.getElementById('status');
+    const citi01Button = document.getElementById('citi01Button');
+    const citi02Button = document.getElementById('citi02Button');
+    const citi03Button = document.getElementById('citi03Button');
+    const servicioButton = document.getElementById('servicioButton');
+    const empleadosButton = document.getElementById('empleadosButton');
+    const antiguosButton = document.getElementById('antiguosButton');
+    const exportButton = document.getElementById('exportButton');
+    const filteredTitle = document.getElementById('filteredTitle');
+    const filteredStatus = document.getElementById('filteredStatus');
+    const filteredTableWrap = document.getElementById('filteredTableWrap');
+    let loadedRows = [];
+    let currentView = {
+      mode: 'idle',
+      title: '',
+      rows: [],
+      baseRows: [],
+      extraColumns: [],
+      antiguedadMap: new Map(),
+      ancientOnly: false,
+      message: '',
+    };
+    const ANCIENT_THRESHOLD = { years: 4, months: 6, days: 0 };
+
+    const getExcelColumnLetter = (columnNumber) => {
+      let dividend = columnNumber;
+      let columnName = '';
+
+      while (dividend > 0) {
+        const modulo = (dividend - 1) % 26;
+        columnName = String.fromCharCode(65 + modulo) + columnName;
+        dividend = Math.floor((dividend - modulo) / 26);
+      }
+
+      return columnName;
+    };
+
+    const columns = [
+      { label: 'CODIGO2', candidates: ['codigo2', 'codigo 2', 'codigo'] },
+      { label: 'CATEG', candidates: ['categ', 'cat'] },
+      { label: 'C. COSTO', candidates: ['c costo', 'c.costo', 'ccosto', 'costo'] },
+      { label: 'SECTOR', candidates: ['sector'] },
+      { label: 'NOMBRES', candidates: ['nombres'] },
+      { label: 'PATERNO', candidates: ['paterno'] },
+      { label: 'MATERNO', candidates: ['materno'] },
+      { label: 'DNI', candidates: ['dni'] },
+      { label: 'PUESTO', candidates: ['puesto'] },
+      { label: 'F. INGRESO', candidates: ['f ingreso', 'f.ingreso', 'fecha ingreso', 'ingreso'] },
+      { label: 'ESTADO', candidates: ['estado'] },
+      { label: 'ULTIMO DIA DE ASISTENCIA', candidates: ['ultimo dia de asistencia', 'ultimodia de asistencia'] },
+      { label: 'F. INICIO', candidates: ['f inicio', 'f.inicio', 'fecha inicio', 'fechainicio'] },
+      { label: 'F. TERMINO', candidates: ['f termino', 'f.termino', 'fecha termino', 'fechatermino'] },
+    ];
+
+    const normalize = (value) =>
+      (value ?? '')
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '');
+
+    const findKey = (row, candidates) => {
+      const keys = Object.keys(row);
+      for (const key of keys) {
+        const keyNorm = normalize(key);
+        if (candidates.some(candidate => keyNorm === normalize(candidate))) {
+          return key;
+        }
+      }
+      return null;
+    };
+
+    const escapeHtml = (value) =>
+      (value ?? '')
+        .toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+    const renderTable = (rows, container, options = {}) => {
+      const extraColumns = options.extraColumns || [];
+
+      if (!rows.length) {
+        container.innerHTML = '<div class="empty">No se encontraron filas para mostrar.</div>';
+        return;
+      }
+
+      const keyMap = columns.map(column => ({
+        label: column.label,
+        key: findKey(rows[0], column.candidates),
+      }));
+      const dniKey = keyMap.find(column => column.label === 'DNI')?.key || findKey(rows[0], ['dni']);
+      const dniBands = new Map();
+      let nextBandIndex = 0;
+
+      const headerHtml = keyMap
+        .map(column => `<th>${escapeHtml(column.label)}</th>`)
+        .concat(extraColumns.map(column => `<th>${escapeHtml(column.label)}</th>`))
+        .join('');
+
+      const bodyHtml = rows
+        .map(row => {
+          const dniValue = dniKey ? normalizeDni(row[dniKey]) : '';
+          let bandIndex = 0;
+          if (dniValue) {
+            if (!dniBands.has(dniValue)) {
+              dniBands.set(dniValue, nextBandIndex);
+              nextBandIndex += 1;
+            }
+            bandIndex = dniBands.get(dniValue);
+          } else {
+            bandIndex = nextBandIndex;
+            nextBandIndex += 1;
+          }
+          const rowClass = bandIndex % 2 === 0 ? 'dni-band-a' : 'dni-band-b';
+
+          const baseCells = keyMap
+            .map(column => `<td>${escapeHtml(column.key ? row[column.key] : '')}</td>`)
+            .join('');
+          const extraCells = extraColumns
+            .map((column) => {
+              const value = column.value(row);
+              const className = typeof column.className === 'function'
+                ? column.className(row, value)
+                : (column.className || '');
+              const classAttr = className ? ` class="${escapeHtml(className)}"` : '';
+              return `<td${classAttr}>${escapeHtml(value)}</td>`;
+            })
+            .join('');
+          return `<tr class="${rowClass}">${baseCells}${extraCells}</tr>`;
+        })
+        .join('');
+
+      container.innerHTML = `
+        <table>
+          <thead>
+            <tr>${headerHtml}</tr>
+          </thead>
+          <tbody>${bodyHtml}</tbody>
+        </table>
+      `;
+    };
+
+    const isEstadoUno = (value) => {
+      const normalized = normalize(value);
+      return normalized === '1' || normalized === '01' || value === true;
+    };
+
+    const filterSectorRows = (rows, sectorValue) => {
+      if (!rows.length) {
+        return { rows: [], message: 'No hay datos cargados.' };
+      }
+
+      const sampleRow = rows[0];
+      const estadoKey = findKey(sampleRow, ['estado']);
+      const sectorKey = findKey(sampleRow, ['sector']);
+      const categKey = findKey(sampleRow, ['categ', 'cat']);
+
+      if (!estadoKey || !sectorKey || !categKey) {
+        return {
+          rows: [],
+          message: 'No se encontraron una o más columnas necesarias: ESTADO, SECTOR o CATEG.',
+        };
+      }
+
+      return {
+        rows: rows.filter(row =>
+          isEstadoUno(row[estadoKey]) &&
+          normalize(row[sectorKey]) === normalize(sectorValue) &&
+          normalize(row[categKey]) === normalize('OBR')
+        ),
+        message: '',
+      };
+    };
+
+    const filterEstadoCategoriaRows = (rows, categoriaValue) => {
+      if (!rows.length) {
+        return { rows: [], message: 'No hay datos cargados.' };
+      }
+
+      const sampleRow = rows[0];
+      const estadoKey = findKey(sampleRow, ['estado']);
+      const categKey = findKey(sampleRow, ['categ', 'cat']);
+
+      if (!estadoKey || !categKey) {
+        return {
+          rows: [],
+          message: 'No se encontraron una o más columnas necesarias: ESTADO o CATEG.',
+        };
+      }
+
+      return {
+        rows: rows.filter(row =>
+          isEstadoUno(row[estadoKey]) &&
+          normalize(row[categKey]) === normalize(categoriaValue)
+        ),
+        message: '',
+      };
+    };
+
+    const normalizeDni = (value) =>
+      (value ?? '').toString().replace(/\D/g, '');
+
+    const parseDateValue = (value) => {
+      if (value instanceof Date && !Number.isNaN(value.getTime())) {
+        return value;
+      }
+
+      if (typeof value === 'number' && Number.isFinite(value) && typeof XLSX !== 'undefined' && XLSX.SSF && XLSX.SSF.parse_date_code) {
+        const parsed = XLSX.SSF.parse_date_code(value);
+        if (parsed) {
+          return new Date(parsed.y, parsed.m - 1, parsed.d);
+        }
+      }
+
+      const text = (value ?? '').toString().trim();
+      if (!text) return null;
+
+      const normalized = text.replace(/\s+/g, '');
+      let match = normalized.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+      if (match) {
+        let day = Number(match[1]);
+        let month = Number(match[2]) - 1;
+        let year = Number(match[3]);
+        if (year < 100) year += 2000;
+        const date = new Date(year, month, day);
+        return Number.isNaN(date.getTime()) ? null : date;
+      }
+
+      match = normalized.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (match) {
+        const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+        return Number.isNaN(date.getTime()) ? null : date;
+      }
+
+      match = normalized.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+      if (match) {
+        const date = new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
+        return Number.isNaN(date.getTime()) ? null : date;
+      }
+
+      const fallback = new Date(text);
+      return Number.isNaN(fallback.getTime()) ? null : fallback;
+    };
+
+    const formatDuration = (startDate, endDate) => {
+      if (!startDate || !endDate) return '';
+
+      let start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+      let end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+
+      if (end < start) {
+        [start, end] = [end, start];
+      }
+
+      let years = end.getFullYear() - start.getFullYear();
+      let months = end.getMonth() - start.getMonth();
+      let days = end.getDate() - start.getDate();
+
+      if (days < 0) {
+        months -= 1;
+        const daysInPrevMonth = new Date(end.getFullYear(), end.getMonth(), 0).getDate();
+        days += daysInPrevMonth;
+      }
+
+      if (months < 0) {
+        years -= 1;
+        months += 12;
+      }
+
+      const yearLabel = years === 1 ? 'año' : 'años';
+      const monthLabel = months === 1 ? 'mes' : 'meses';
+      const dayLabel = days === 1 ? 'día' : 'días';
+      return `${years} ${yearLabel}, ${months} ${monthLabel}, ${days} ${dayLabel}`;
+    };
+
+    const getRowDurationParts = (row) => {
+      const estadoKey = findKey(row, ['estado']);
+      const ingresoKey = findKey(row, ['f ingreso', 'f.ingreso', 'fecha ingreso', 'ingreso']);
+      const ultimoDiaKey = findKey(row, ['ultimo dia de asistencia', 'ultimodia de asistencia']);
+      const terminoKey = findKey(row, ['f termino', 'f.termino', 'fecha termino', 'fechatermino']);
+
+      if (!estadoKey || !ingresoKey) return null;
+
+      const estado = normalize(row[estadoKey]);
+      const startDate = parseDateValue(row[ingresoKey]);
+      const endValue = estado === '0' || estado === '00'
+        ? (ultimoDiaKey ? row[ultimoDiaKey] : '')
+        : estado === '1' || estado === '01'
+          ? (terminoKey ? row[terminoKey] : '')
+          : '';
+      const endDate = parseDateValue(endValue);
+
+      if (!startDate || !endDate) return null;
+
+      let start = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+      let end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+
+      if (end < start) {
+        [start, end] = [end, start];
+      }
+
+      let years = end.getFullYear() - start.getFullYear();
+      let months = end.getMonth() - start.getMonth();
+      let days = end.getDate() - start.getDate();
+
+      if (days < 0) {
+        months -= 1;
+        const daysInPrevMonth = new Date(end.getFullYear(), end.getMonth(), 0).getDate();
+        days += daysInPrevMonth;
+      }
+
+      if (months < 0) {
+        years -= 1;
+        months += 12;
+      }
+
+      return { years, months, days };
+    };
+
+    const getRowDuration = (row) => {
+      const parts = getRowDurationParts(row);
+      return parts ? formatDurationParts(parts) : '';
+    };
+
+    const formatDurationParts = (parts) => {
+      const yearLabel = parts.years === 1 ? 'año' : 'años';
+      const monthLabel = parts.months === 1 ? 'mes' : 'meses';
+      const dayLabel = parts.days === 1 ? 'día' : 'días';
+      return `${parts.years} ${yearLabel}, ${parts.months} ${monthLabel}, ${parts.days} ${dayLabel}`;
+    };
+
+    const addDurationParts = (base, extra) => {
+      const total = {
+        years: base.years + extra.years,
+        months: base.months + extra.months,
+        days: base.days + extra.days,
+      };
+
+      if (total.days >= 30) {
+        total.months += Math.floor(total.days / 30);
+        total.days = total.days % 30;
+      }
+
+      if (total.months >= 12) {
+        total.years += Math.floor(total.months / 12);
+        total.months = total.months % 12;
+      }
+
+      return total;
+    };
+
+    const isDurationGreaterThan = (parts, threshold) => {
+      if (!parts) return false;
+      if (parts.years !== threshold.years) return parts.years > threshold.years;
+      if (parts.months !== threshold.months) return parts.months > threshold.months;
+      return parts.days > threshold.days;
+    };
+
+    const buildAntiguedadMap = (rows) => {
+      const totals = new Map();
+
+      rows.forEach((row) => {
+        const dniKey = findKey(row, ['dni']);
+        const dniValue = dniKey ? normalizeDni(row[dniKey]) : '';
+        if (!dniValue) return;
+
+        const durationParts = getRowDurationParts(row);
+        if (!durationParts) return;
+
+        if (!totals.has(dniValue)) {
+          totals.set(dniValue, { ...durationParts });
+          return;
+        }
+
+        totals.set(dniValue, addDurationParts(totals.get(dniValue), durationParts));
+      });
+
+      return totals;
+    };
+
+    const buildFilteredExtraColumns = (antiguedadMap) => ([
+      {
+        label: 'TIEMPO',
+        value: (row) => getRowDuration(row),
+      },
+      {
+        label: 'ANTIGUEDAD',
+        value: (row) => {
+          const dniKey = findKey(row, ['dni']);
+          const dniValue = dniKey ? normalizeDni(row[dniKey]) : '';
+          if (!dniValue) return getRowDuration(row);
+
+          const total = antiguedadMap.get(dniValue);
+          return total ? formatDurationParts(total) : getRowDuration(row);
+        },
+        className: (row) => {
+          const dniKey = findKey(row, ['dni']);
+          const dniValue = dniKey ? normalizeDni(row[dniKey]) : '';
+          if (!dniValue) return '';
+
+          const total = antiguedadMap.get(dniValue);
+          return isDurationGreaterThan(total, ANCIENT_THRESHOLD) ? 'antiguedad-alert' : '';
+        },
+      },
+    ]);
+
+    const renderCurrentFilteredView = () => {
+      if (currentView.mode !== 'filtered') return;
+
+      filteredTitle.textContent = currentView.ancientOnly
+        ? `${currentView.title} | antiguos`
+        : currentView.title;
+
+      filteredStatus.textContent = currentView.message
+        ? currentView.message
+        : currentView.ancientOnly
+          ? `Filas antiguas: ${currentView.rows.length}`
+          : `Filas encontradas: ${currentView.rows.length}`;
+
+      if (currentView.rows.length) {
+        renderTable(currentView.rows, filteredTableWrap, {
+          extraColumns: currentView.extraColumns,
+        });
+        exportButton.disabled = false;
+      } else {
+        filteredTableWrap.innerHTML = `<div class="empty">${currentView.emptyMessage || 'No hay datos para mostrar.'}</div>`;
+        exportButton.disabled = true;
+      }
+
+      antiguosButton.disabled = false;
+      antiguosButton.classList.toggle('active', currentView.ancientOnly);
+    };
+
+    const setFilteredView = (title, rows, message, emptyMessage) => {
+      const baseRows = sortRowsByDni(rows);
+      const antiguedadMap = buildAntiguedadMap(baseRows);
+
+      currentView = {
+        mode: 'filtered',
+        title,
+        rows: [...baseRows],
+        baseRows: [...baseRows],
+        extraColumns: buildFilteredExtraColumns(antiguedadMap),
+        antiguedadMap,
+        ancientOnly: false,
+        message: message || '',
+        emptyMessage,
+      };
+
+      renderCurrentFilteredView();
+    };
+
+    const toggleAncientFilter = () => {
+      if (currentView.mode !== 'filtered') {
+        filteredStatus.textContent = 'Selecciona primero una tabla de botón.';
+        return;
+      }
+
+      currentView.ancientOnly = !currentView.ancientOnly;
+      currentView.rows = currentView.ancientOnly
+        ? currentView.baseRows.filter((row) => {
+          const dniKey = findKey(row, ['dni']);
+          const dniValue = dniKey ? normalizeDni(row[dniKey]) : '';
+          const total = dniValue ? currentView.antiguedadMap.get(dniValue) : null;
+          return isDurationGreaterThan(total, ANCIENT_THRESHOLD);
+        })
+        : [...currentView.baseRows];
+
+      renderCurrentFilteredView();
+    };
+
+    const exportVisibleTable = async () => {
+      const table = filteredTableWrap.querySelector('table');
+
+      if (!table) {
+        filteredStatus.textContent = 'No hay una tabla visible para exportar.';
+        return;
+      }
+
+      if (typeof ExcelJS === 'undefined') {
+        throw new Error('No se pudo cargar la librería de exportación.');
+      }
+
+      const headers = Array.from(table.querySelectorAll('thead th'))
+        .map((th) => th.textContent.trim());
+      const bodyRows = Array.from(table.querySelectorAll('tbody tr'));
+      const rows = bodyRows.map((tr) =>
+        Array.from(tr.querySelectorAll('td')).map((td) => td.textContent.trim())
+      );
+
+      if (!headers.length || !rows.length) {
+        filteredStatus.textContent = 'No hay una tabla visible para exportar.';
+        return;
+      }
+
+      const workbook = new ExcelJS.Workbook();
+      const visibleTitle = currentView.ancientOnly
+        ? `${currentView.title} | antiguos`
+        : currentView.title;
+      workbook.creator = 'Codex';
+      workbook.created = new Date();
+      workbook.modified = new Date();
+      workbook.subject = visibleTitle;
+      workbook.title = visibleTitle;
+      workbook.company = 'Exportacion de personal';
+
+      const sheetName = (visibleTitle || 'Vista')
+        .replace(/[\\/*?:\[\]]/g, ' ')
+        .trim()
+        .slice(0, 31) || 'Vista';
+      const worksheet = workbook.addWorksheet(sheetName, {
+        views: [{ state: 'frozen', ySplit: 3 }],
+        properties: { tabColor: { argb: '1D4ED8' } },
+      });
+      worksheet.pageSetup = {
+        orientation: 'landscape',
+        fitToPage: true,
+        fitToWidth: 1,
+        fitToHeight: 0,
+      };
+
+      const exportColumns = headers.map((label) => ({ label }));
+      const totalColumns = exportColumns.length;
+
+      worksheet.mergeCells(1, 1, 1, totalColumns);
+      worksheet.mergeCells(2, 1, 2, totalColumns);
+
+      const titleCell = worksheet.getCell(1, 1);
+      titleCell.value = visibleTitle || 'Tabla visible';
+      titleCell.font = { bold: true, size: 16, color: { argb: 'FFFFFF' } };
+      titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+      titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1D4ED8' } };
+
+      const subtitleCell = worksheet.getCell(2, 1);
+      subtitleCell.value = `Generado: ${new Date().toLocaleString('es-PE')}`;
+      subtitleCell.font = { italic: true, color: { argb: '475569' } };
+      subtitleCell.alignment = { horizontal: 'left', vertical: 'middle' };
+
+      const headerRow = worksheet.getRow(3);
+      exportColumns.forEach((column, index) => {
+        const cell = headerRow.getCell(index + 1);
+        cell.value = column.label;
+        cell.font = { bold: true, color: { argb: 'FFFFFF' } };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2F5FA8' } };
+        cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+        cell.border = {
+          top: { style: 'thin', color: { argb: 'CBD5E1' } },
+          left: { style: 'thin', color: { argb: 'CBD5E1' } },
+          bottom: { style: 'thin', color: { argb: 'CBD5E1' } },
+          right: { style: 'thin', color: { argb: 'CBD5E1' } },
+        };
+      });
+      headerRow.height = 24;
+
+      rows.forEach((values, rowIndex) => {
+        const excelRow = worksheet.getRow(rowIndex + 4);
+        const bodyRow = bodyRows[rowIndex];
+        const rowFillColor = bodyRow?.classList.contains('dni-band-b') ? 'F4F8FF' : 'FFFFFF';
+        values.forEach((value, colIndex) => {
+          const columnDef = exportColumns[colIndex];
+          const cell = excelRow.getCell(colIndex + 1);
+          cell.value = value ?? '';
+          cell.alignment = { vertical: 'middle', horizontal: 'left' };
+          cell.border = {
+            top: { style: 'thin', color: { argb: 'E2E8F0' } },
+            left: { style: 'thin', color: { argb: 'E2E8F0' } },
+            bottom: { style: 'thin', color: { argb: 'E2E8F0' } },
+            right: { style: 'thin', color: { argb: 'E2E8F0' } },
+          };
+          cell.font = { color: { argb: '1F2937' } };
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: rowFillColor },
+          };
+
+          if (columnDef.label === 'ANTIGUEDAD') {
+            const domCell = bodyRows[rowIndex]?.querySelectorAll('td')[colIndex];
+            if (domCell?.classList.contains('antiguedad-alert')) {
+              cell.font = { color: { argb: 'B91C1C' }, bold: true };
+              cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FEE2E2' } };
+            }
+          }
+        });
+      });
+
+      worksheet.columns = exportColumns.map((column, index) => {
+        const headerLen = String(column.label).length;
+        const sampleLen = Math.min(
+          40,
+          Math.max(
+            headerLen,
+            ...rows.map(row => String(row[index] ?? '').length)
+          )
+        );
+        return { width: Math.max(12, sampleLen + 2) };
+      });
+
+      worksheet.views = [{ state: 'frozen', ySplit: 3 }];
+      worksheet.autoFilter = `A3:${getExcelColumnLetter(totalColumns)}3`;
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${sheetName}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    };
+
+    const expandRowsByDni = (sourceRows, matchingRows) => {
+      if (!sourceRows.length || !matchingRows.length) return [];
+
+      const sourceDniKey = findKey(sourceRows[0], ['dni']);
+      const matchDniKey = findKey(matchingRows[0], ['dni']);
+
+      if (!sourceDniKey || !matchDniKey) {
+        return matchingRows;
+      }
+
+      const dniSet = new Set(
+        matchingRows
+          .map(row => normalizeDni(row[matchDniKey]))
+          .filter(Boolean)
+      );
+
+      if (!dniSet.size) return matchingRows;
+
+      return sourceRows.filter(row => dniSet.has(normalizeDni(row[sourceDniKey])));
+    };
+
+    const sortRowsByDni = (rows) => {
+      if (!rows.length) return rows;
+
+      const dniKey = findKey(rows[0], ['dni']);
+      if (!dniKey) return rows;
+
+      const extractDigits = (value) => (value ?? '').toString().replace(/\D/g, '');
+
+      return [...rows].sort((a, b) => {
+        const dniA = extractDigits(a[dniKey]);
+        const dniB = extractDigits(b[dniKey]);
+
+        if (!dniA && !dniB) return 0;
+        if (!dniA) return 1;
+        if (!dniB) return -1;
+        if (dniA.length !== dniB.length) return dniA.length - dniB.length;
+        return dniA.localeCompare(dniB);
+      });
+    };
+
+    const renderFiltered = (title, result, emptyMessage) => {
+      const expandedRows = expandRowsByDni(loadedRows, result.rows);
+      setFilteredView(title, expandedRows, result.message, emptyMessage);
+    };
+
+    fileInput.addEventListener('change', async (event) => {
+      status.textContent = '';
+      citi01Button.disabled = true;
+      citi02Button.disabled = true;
+      citi03Button.disabled = true;
+      servicioButton.disabled = true;
+      empleadosButton.disabled = true;
+      exportButton.disabled = true;
+      filteredTitle.textContent = 'Selecciona un botón para ver la tabla filtrada.';
+      filteredStatus.textContent = '';
+      filteredTableWrap.innerHTML = '<div class="empty">La tabla filtrada aparecerá aquí al hacer clic en un botón.</div>';
+      loadedRows = [];
+
+      const file = event.target.files[0];
+      if (!file) {
+        return;
+      }
+
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
+        const targetSheetName = 'DB PERSONAL';
+        const sheetName = workbook.SheetNames.find(name => name.trim().toLowerCase() === targetSheetName.toLowerCase());
+
+        if (!sheetName) {
+          status.textContent = `No se encontró la hoja "${targetSheetName}".`;
+          return;
+        }
+
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: '', raw: false });
+
+        if (!jsonData.length) {
+          status.textContent = `La hoja "${sheetName}" está vacía o no se pudo leer.`;
+          return;
+        }
+
+        loadedRows = jsonData;
+        citi01Button.disabled = false;
+        citi02Button.disabled = false;
+        citi03Button.disabled = false;
+        servicioButton.disabled = false;
+        empleadosButton.disabled = false;
+        status.textContent = `Archivo cargado: ${file.name}\nHoja usada: ${sheetName}\nFilas encontradas: ${jsonData.length}`;
+      } catch (error) {
+        status.textContent = 'Error al procesar el archivo: ' + error.message;
+        exportButton.disabled = true;
+      }
+    });
+
+    citi01Button.addEventListener('click', () => {
+      if (!loadedRows.length) {
+        renderFiltered('CITI01', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
+        return;
+      }
+
+      const result = filterSectorRows(loadedRows, 'CITI01');
+      renderFiltered('CITI01', result, 'No hay filas para CITI01.');
+    });
+
+    citi02Button.addEventListener('click', () => {
+      if (!loadedRows.length) {
+        renderFiltered('CITI02', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
+        return;
+      }
+
+      const result = filterSectorRows(loadedRows, 'CITI02');
+      renderFiltered('CITI02', result, 'No hay filas para CITI02.');
+    });
+
+    citi03Button.addEventListener('click', () => {
+      if (!loadedRows.length) {
+        renderFiltered('CITI03', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
+        return;
+      }
+
+      const result = filterSectorRows(loadedRows, 'CITI03');
+      renderFiltered('CITI03', result, 'No hay filas para CITI03.');
+    });
+
+    servicioButton.addEventListener('click', () => {
+      if (!loadedRows.length) {
+        renderFiltered('SERVICIO', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
+        return;
+      }
+
+      const result = filterEstadoCategoriaRows(loadedRows, 'OBR_S');
+      renderFiltered('SERVICIO', result, 'No hay filas para SERVICIO.');
+    });
+
+    empleadosButton.addEventListener('click', () => {
+      if (!loadedRows.length) {
+        renderFiltered('EMPLEADOS', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
+        return;
+      }
+
+      const result = filterEstadoCategoriaRows(loadedRows, 'EMP');
+      renderFiltered('EMPLEADOS', result, 'No hay filas para EMPLEADOS.');
+    });
+
+    antiguosButton.addEventListener('click', () => {
+      toggleAncientFilter();
+    });
+
+    exportButton.addEventListener('click', async () => {
+      try {
+        await exportVisibleTable();
+      } catch (error) {
+        filteredStatus.textContent = 'Error al exportar: ' + error.message;
+      }
+    });
+  </script>
+</body>
+</html>
