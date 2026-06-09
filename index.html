@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel de Personal | Vista Gerencial</title>
+  <title>RRHH</title>
   <style>
     :root {
       color-scheme: light;
@@ -29,47 +29,157 @@
       margin: 0;
       font-family: "Segoe UI Variable", "Segoe UI", "Aptos", "Helvetica Neue", Arial, sans-serif;
       font-size: 14px;
-      background:
-        radial-gradient(circle at top left, rgba(29, 78, 216, 0.12), transparent 28%),
-        radial-gradient(circle at top right, rgba(19, 61, 122, 0.12), transparent 24%),
-        linear-gradient(180deg, #f7f9fc 0%, var(--bg) 100%);
+      background: linear-gradient(180deg, #f7f9fc 0%, var(--bg) 100%);
       color: var(--text);
       min-height: 100vh;
       position: relative;
     }
 
-    body::before,
-    body::after {
-      content: "";
-      position: fixed;
-      inset: auto;
-      width: 360px;
-      height: 360px;
-      border-radius: 50%;
-      pointer-events: none;
-      filter: blur(8px);
-      opacity: 0.42;
-      z-index: 0;
-    }
-
-    body::before {
-      top: -120px;
-      right: -120px;
-      background: radial-gradient(circle, rgba(29, 78, 216, 0.18), rgba(29, 78, 216, 0));
-    }
-
-    body::after {
-      bottom: -140px;
-      left: -120px;
-      background: radial-gradient(circle, rgba(15, 118, 110, 0.16), rgba(15, 118, 110, 0));
-    }
-
     .wrap {
       max-width: 1480px;
       margin: 0 auto;
-      padding: 26px;
+      padding: 14px 26px 26px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .control-screen {
+      min-height: auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 8px 24px 4px;
       position: relative;
       z-index: 1;
+    }
+
+    .control-card {
+      width: min(1120px, 100%);
+      padding: 10px 16px 12px;
+    }
+
+    .control-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 0;
+    }
+
+    .control-grid button {
+      border: 1px solid rgba(199, 210, 226, 0.95);
+      border-radius: 14px;
+      min-height: 42px;
+      min-width: 170px;
+      padding: 7px 11px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      background: linear-gradient(180deg, #ffffff 0%, #f3f7fc 100%);
+      color: #31465f;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+      font: inherit;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .control-grid button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    .control-grid button strong {
+      display: block;
+      font-size: 12px;
+      line-height: 1.2;
+      margin-bottom: 2px;
+      color: var(--accent-deep);
+    }
+
+    .control-grid button .btn-icon {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(29, 78, 216, 0.12);
+      color: var(--accent-deep);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .control-grid button .btn-text span {
+      display: block;
+      font-size: 8px;
+      line-height: 1.15;
+      color: var(--muted);
+    }
+
+    .control-grid button .btn-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .control-grid button.primary {
+      background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent) 100%);
+      color: #ffffff;
+      border-color: rgba(29, 78, 216, 0.25);
+    }
+
+    .control-grid button.primary strong,
+    .control-grid button.primary .btn-text span {
+      color: #ffffff;
+    }
+
+    .control-grid button.primary .btn-icon {
+      background: rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+    }
+
+    .control-grid button.active {
+      background: linear-gradient(135deg, #8b1d1d 0%, #d11f1f 100%);
+      color: #ffffff;
+      border-color: rgba(220, 38, 38, 0.32);
+      box-shadow: 0 12px 24px rgba(153, 27, 27, 0.24);
+    }
+
+    .control-grid button.active strong,
+    .control-grid button.active .btn-text span {
+      color: #ffffff;
+    }
+
+    .control-grid button.active .btn-icon {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .report-screen {
+      min-height: auto;
+    }
+
+    .report-screen .wrap {
+      padding-top: 4px;
+    }
+
+    .report-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 10px;
+      border: 0;
+      border-radius: 14px;
+      padding: 8px 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #f3f7fc 100%);
+      color: #31465f;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
     }
 
     .card {
@@ -87,7 +197,8 @@
       background: linear-gradient(135deg, #0f2f5e 0%, #17438a 52%, #1d4ed8 100%);
       color: #ffffff;
       border-color: rgba(255, 255, 255, 0.14);
-      box-shadow: 0 24px 60px rgba(14, 40, 86, 0.26);
+      box-shadow: 0 18px 44px rgba(14, 40, 86, 0.22);
+      padding: 12px 16px;
       overflow: hidden;
       position: relative;
     }
@@ -95,9 +206,9 @@
     .hero-card::after {
       content: "";
       position: absolute;
-      inset: auto -40px -55px auto;
-      width: 220px;
-      height: 220px;
+      inset: auto -55px -70px auto;
+      width: 160px;
+      height: 160px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
       pointer-events: none;
@@ -112,38 +223,90 @@
       z-index: 1;
     }
 
+    .hero-content {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-left {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .hero-status {
+      flex: 0 0 180px;
+      align-self: stretch;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 54px;
+      padding-top: 4px;
+    }
+
     .hero-card h1 {
       margin: 0;
-      font-size: clamp(24px, 2.2vw, 32px);
+      font-size: clamp(21px, 1.8vw, 26px);
       line-height: 1.1;
       letter-spacing: -0.03em;
       color: #fff;
     }
 
     .hero-card p {
-      margin: 10px 0 0;
+      margin: 6px 0 0;
       max-width: 820px;
       color: rgba(255, 255, 255, 0.84);
-      line-height: 1.55;
-      font-size: 13px;
+      line-height: 1.35;
+      font-size: 12px;
     }
 
     .file-shell {
-      margin-top: 18px;
-      padding: 16px;
-      border-radius: 18px;
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 14px;
       border: 1px dashed rgba(255, 255, 255, 0.26);
       background: rgba(255, 255, 255, 0.09);
       position: relative;
       z-index: 1;
     }
 
+    .upload-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .upload-grid .file-shell {
+      margin-top: 0;
+    }
+
+    .upload-grid input[type="file"] {
+      font-size: 12px;
+    }
+
+    .upload-grid input[type="file"]::file-selector-button {
+      padding: 8px 12px;
+      margin-right: 10px;
+    }
+
+    .report-note {
+      margin: 8px 0 0;
+      max-width: 900px;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.35;
+      font-size: 12px;
+    }
+
     .file-shell .file-label {
       display: block;
-      margin-bottom: 10px;
-      font-size: 12px;
+      margin-bottom: 5px;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: rgba(255, 255, 255, 0.74);
     }
@@ -262,16 +425,17 @@
     }
 
     #status {
-      margin-top: 14px;
+      width: 100%;
+      margin-top: 0;
       white-space: pre-line;
       color: rgba(255, 255, 255, 0.88);
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 16px;
-      padding: 14px 16px;
-      min-height: 56px;
-      line-height: 1.5;
-      font-size: 13px;
+      padding: 10px 12px;
+      min-height: 84px;
+      line-height: 1.35;
+      font-size: 11.5px;
     }
 
     .table-wrap {
@@ -333,6 +497,22 @@
       background: #f5f8fd;
     }
 
+    tbody tr.marcacion-match td {
+      background: #effaf2;
+    }
+
+    tbody tr.marcacion-miss td {
+      background: #fff7ed;
+    }
+
+    tbody tr.marcacion-match:hover td {
+      background: #e5f7ea;
+    }
+
+    tbody tr.marcacion-miss:hover td {
+      background: #ffeeda;
+    }
+
     .empty {
       padding: 24px;
       color: var(--muted);
@@ -350,10 +530,7 @@
     }
 
     #filteredTitle {
-      margin: 0;
-      color: var(--accent-deep);
-      font-size: 16px;
-      font-weight: 700;
+      display: none;
     }
 
     #filteredStatus {
@@ -361,6 +538,26 @@
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
+    }
+
+    .marcaciones-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    #marcacionesSummary {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    #marcacionesStatus {
+      white-space: pre-line;
     }
 
     .card + .card {
@@ -389,6 +586,15 @@
         flex-direction: column;
       }
 
+      .hero-content {
+        flex-direction: column;
+      }
+
+      .hero-status {
+        flex-basis: auto;
+        min-height: 0;
+      }
+
       .button-right {
         margin-left: 0;
         padding-left: 0;
@@ -398,18 +604,61 @@
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <section id="controlScreen" class="control-screen">
+    <div class="card control-card">
+      <div class="control-grid">
+        <button id="openAntiguedadButton" class="primary" type="button">
+          <span class="btn-icon" aria-hidden="true">â—·</span>
+          <span class="btn-text">
+            <strong>Antigüedad</strong>
+            <span>Informe principal</span>
+          </span>
+        </button>
+        <button id="openMarcacionesButton" type="button">
+          <span class="btn-icon" aria-hidden="true">â–¤</span>
+          <span class="btn-text">
+            <strong>Marcaciones</strong>
+            <span>Informe pendiente</span>
+          </span>
+        </button>
+        <button id="openAsistenciaButton" type="button">
+          <span class="btn-icon" aria-hidden="true">âœ“</span>
+          <span class="btn-text">
+            <strong>Asistencia</strong>
+            <span>Informe pendiente</span>
+          </span>
+        </button>
+        <button id="openVacacionesButton" type="button">
+          <span class="btn-icon" aria-hidden="true">âœˆ</span>
+          <span class="btn-text">
+            <strong>Vacaciones</strong>
+            <span>Informe pendiente</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="reportScreen" class="report-screen" hidden>
+    <div class="wrap">
+      <section class="report-view" data-report-view="antiguedad">
     <div class="card hero-card">
-      <div class="hero-header">
-        <div>
-          <h1>CONTROL DE ANTIGÜEDAD</h1>
+      <div class="hero-content">
+        <div class="hero-left">
+          <div class="hero-header">
+            <div>
+              <h1>CONTROL DE ANTIGEDAD</h1>
+            </div>
+          </div>
+          <label class="file-shell" for="fileInput">
+            <span class="file-label">Archivo Excel</span>
+            <input id="fileInput" type="file" accept=".xlsx,.xls" />
+          </label>
+        </div>
+        <div class="hero-status">
+          <div id="status"></div>
         </div>
       </div>
-      <label class="file-shell" for="fileInput">
-        <span class="file-label">Archivo Excel</span>
-        <input id="fileInput" type="file" accept=".xlsx,.xls" />
-      </label>
-      <div id="status"></div>
     </div>
 
     <div class="card">
@@ -428,22 +677,86 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="filtered-head">
-        <p id="filteredTitle">Selecciona un botón para ver la tabla filtrada.</p>
-        <div id="filteredStatus"></div>
-      </div>
-      <div class="table-wrap" id="filteredTableWrap">
+      <div class="card">
+        <div class="filtered-head">
+          <p id="filteredTitle">Selecciona un botón para ver la tabla filtrada.</p>
+          <div id="filteredStatus"></div>
+        </div>
+        <div class="table-wrap" id="filteredTableWrap">
         <div class="empty">La tabla filtrada aparecerá aquí al hacer clic en un botón.</div>
       </div>
     </div>
-  </div>
+      </section>
+      <section class="report-view" data-report-view="marcaciones" hidden>
+        <div class="card hero-card">
+          <div class="hero-content">
+            <div class="hero-left">
+              <div class="hero-header">
+                <div>
+                  <h1>CONTROL DE MARCACIONES</h1>
+                  <p>Sube la boleta PDF para extraer el código y la hoja de cÁlculo para traer todas las filas y columnas de ese código.</p>
+                </div>
+              </div>
+              <div class="upload-grid">
+                <label class="file-shell" for="marcacionesPdfInput">
+                  <span class="file-label">Subir boleta</span>
+                  <input id="marcacionesPdfInput" type="file" accept=".pdf,application/pdf" />
+                </label>
+                <label class="file-shell" for="marcacionesExcelInput">
+                  <span class="file-label">Subir marcaciÓn</span>
+                  <input id="marcacionesExcelInput" type="file" accept=".ods,.xlsx,.xls,application/vnd.oasis.opendocument.spreadsheet" />
+                </label>
+              </div>
+              <p class="report-note">La tabla se arma con las filas del Excel/ODS que coinciden con el código detectado en la boleta PDF.</p>
+            </div>
+            <div class="hero-status">
+              <div id="marcacionesStatus"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="marcaciones-head">
+            <p id="marcacionesSummary">Sube la boleta PDF para generar la tabla.</p>
+            <button id="exportMarcacionesButton" disabled style="margin-left:auto;padding:8px 16px;border-radius:12px;border:1px solid rgba(29,78,216,.5);background:linear-gradient(135deg,#0f3b71,#1d4ed8);color:#fff;font:inherit;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;box-shadow:0 8px 18px rgba(15,23,42,.12);transition:transform .16s,box-shadow .16s;">Exportar Excel</button>
+          </div>
+          <div class="table-wrap" id="marcacionesTableWrap">
+            <div class="empty">La tabla de marcaciones aparecerá aquí cuando cargues la boleta.</div>
+          </div>
+        </div>
+      </section>
+      <section class="report-view" data-report-view="placeholder" hidden>
+        <div class="card hero-card">
+          <div class="hero-header">
+            <div>
+              <h1 id="placeholderReportTitle">Informe pendiente</h1>
+              <p id="placeholderReportText">Este informe todavía no está construido.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="empty" id="placeholderReportBody">Próximamente se habilitará este informe.</div>
+        </div>
+      </section>
+    </div>
+  </section>
 
   <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
   <script>
+    const controlScreen = document.getElementById('controlScreen');
+    const reportScreen = document.getElementById('reportScreen');
+    const openAntiguedadButton = document.getElementById('openAntiguedadButton');
+    const openMarcacionesButton = document.getElementById('openMarcacionesButton');
+    const openAsistenciaButton = document.getElementById('openAsistenciaButton');
+    const openVacacionesButton = document.getElementById('openVacacionesButton');
     const fileInput = document.getElementById('fileInput');
     const status = document.getElementById('status');
+    const marcacionesPdfInput = document.getElementById('marcacionesPdfInput');
+    const marcacionesExcelInput = document.getElementById('marcacionesExcelInput');
+    const marcacionesStatus = document.getElementById('marcacionesStatus');
+    const marcacionesSummary = document.getElementById('marcacionesSummary');
+    const marcacionesTableWrap = document.getElementById('marcacionesTableWrap');
     const citi01Button = document.getElementById('citi01Button');
     const citi02Button = document.getElementById('citi02Button');
     const citi03Button = document.getElementById('citi03Button');
@@ -454,7 +767,33 @@
     const filteredTitle = document.getElementById('filteredTitle');
     const filteredStatus = document.getElementById('filteredStatus');
     const filteredTableWrap = document.getElementById('filteredTableWrap');
+    const antiguedadView = document.querySelector('[data-report-view="antiguedad"]');
+    const marcacionesView = document.querySelector('[data-report-view="marcaciones"]');
+    const placeholderView = document.querySelector('[data-report-view="placeholder"]');
+    const placeholderReportTitle = document.getElementById('placeholderReportTitle');
+    const placeholderReportText = document.getElementById('placeholderReportText');
+    const placeholderReportBody = document.getElementById('placeholderReportBody');
+    const filterButtons = [
+      citi01Button,
+      citi02Button,
+      citi03Button,
+      servicioButton,
+      empleadosButton,
+    ];
     let loadedRows = [];
+    let marcacionesState = {
+      pdfFileName: '',
+      excelFileName: '',
+      pdfCodes: [],
+      pdfCodeMatches: new Set(),
+      excelRows: [],
+      excelHeaders: [],
+      excelCodeKey: null,
+      excelSheetName: '',
+      matchedRows: [],
+      message: '',
+      summary: 'Sube la boleta PDF para extraer el código.',
+    };
     let currentView = {
       mode: 'idle',
       title: '',
@@ -465,7 +804,72 @@
       ancientOnly: false,
       message: '',
     };
-    const ANCIENT_THRESHOLD = { years: 4, months: 6, days: 0 };
+    const ANCIENT_THRESHOLD = { years: 4, months: 10, days: 0 };
+    const controlButtons = [
+      openAntiguedadButton,
+      openMarcacionesButton,
+      openAsistenciaButton,
+      openVacacionesButton,
+    ];
+    const PDFJS_VERSION = '5.4.624';
+    let pdfJsPromise = null;
+
+    const setActiveControlButton = (activeButton) => {
+      controlButtons.forEach((button) => {
+        button.classList.toggle('active', button === activeButton);
+      });
+    };
+
+    const setActiveFilterButton = (activeButton) => {
+      filterButtons.forEach((button) => {
+        button.classList.toggle('active', button === activeButton);
+      });
+    };
+
+    const showControl = () => {
+      controlScreen.hidden = false;
+      reportScreen.hidden = true;
+    };
+
+    const showAntiguedadReport = (activeButton = openAntiguedadButton) => {
+      reportScreen.hidden = false;
+      antiguedadView.hidden = false;
+      marcacionesView.hidden = true;
+      placeholderView.hidden = true;
+      setActiveControlButton(activeButton);
+    };
+
+    const showMarcacionesReport = (activeButton = openMarcacionesButton) => {
+      reportScreen.hidden = false;
+      antiguedadView.hidden = true;
+      marcacionesView.hidden = false;
+      placeholderView.hidden = true;
+      setActiveControlButton(activeButton);
+      renderMarcacionesView();
+    };
+
+    const showPlaceholderReport = (title, activeButton) => {
+      reportScreen.hidden = false;
+      antiguedadView.hidden = true;
+      marcacionesView.hidden = true;
+      placeholderView.hidden = false;
+      placeholderReportTitle.textContent = title;
+      placeholderReportText.textContent = 'Este informe todavía no está construido.';
+      placeholderReportBody.textContent = 'Próximamente se habilitará este informe.';
+      setActiveControlButton(activeButton);
+    };
+
+    const loadPdfJs = async () => {
+      if (!pdfJsPromise) {
+        pdfJsPromise = import(`https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build/pdf.mjs`).then((module) => {
+          module.GlobalWorkerOptions.workerSrc =
+            `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build/pdf.worker.mjs`;
+          return module;
+        });
+      }
+
+      return pdfJsPromise;
+    };
 
     const getExcelColumnLetter = (columnNumber) => {
       let dividend = columnNumber;
@@ -692,6 +1096,14 @@
       return Number.isNaN(fallback.getTime()) ? null : fallback;
     };
 
+    const getWeekNumber = (d) => {
+      if (!d || Number.isNaN(d.getTime())) return '';
+      const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
+      const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+      return Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+    };
+
     const formatDuration = (startDate, endDate) => {
       if (!startDate || !endDate) return '';
 
@@ -856,16 +1268,13 @@
 
     const renderCurrentFilteredView = () => {
       if (currentView.mode !== 'filtered') return;
-
-      filteredTitle.textContent = currentView.ancientOnly
-        ? `${currentView.title} | antiguos`
-        : currentView.title;
+      const uniqueDniCount = countUniqueDni(currentView.rows);
 
       filteredStatus.textContent = currentView.message
         ? currentView.message
         : currentView.ancientOnly
-          ? `Filas antiguas: ${currentView.rows.length}`
-          : `Filas encontradas: ${currentView.rows.length}`;
+          ? `DNI antiguos diferentes: ${uniqueDniCount}`
+          : `DNI diferentes: ${uniqueDniCount}`;
 
       if (currentView.rows.length) {
         renderTable(currentView.rows, filteredTableWrap, {
@@ -1104,6 +1513,1195 @@
       });
     };
 
+    const countUniqueDni = (rows) => {
+      if (!rows.length) return 0;
+
+      const dniKey = findKey(rows[0], ['dni']);
+      if (!dniKey) return rows.length;
+
+      const dniSet = new Set();
+      rows.forEach((row) => {
+        const dniValue = normalizeDni(row[dniKey]);
+        if (dniValue) {
+          dniSet.add(dniValue);
+        }
+      });
+
+      return dniSet.size || rows.length;
+    };
+
+    const normalizeTextLine = (value) =>
+      (value ?? '')
+        .toString()
+        .replace(/\u00a0/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const normalizeMarcacionesCode = (value) => {
+      const chars = normalizeTextLine(value).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+      if (!chars) return '';
+      const stripped = chars.replace(/^0+/, '');
+      return stripped || '0';
+    };
+
+    const extractPdfLines = (textContent) => {
+      const buckets = new Map();
+
+      textContent.items.forEach((item) => {
+        const text = normalizeTextLine(item.str);
+        if (!text) return;
+
+        const x = Number(item.transform?.[4] ?? 0);
+        const y = Number(item.transform?.[5] ?? 0);
+        const bucketKey = Math.round(y / 2) * 2;
+
+        if (!buckets.has(bucketKey)) {
+          buckets.set(bucketKey, []);
+        }
+
+        buckets.get(bucketKey).push({ x, text });
+      });
+
+      return [...buckets.entries()]
+        .sort((a, b) => b[0] - a[0])
+        .map(([, items]) =>
+          items
+            .sort((a, b) => a.x - b.x)
+            .map((item) => item.text)
+            .join(' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+        )
+        .filter(Boolean);
+    };
+
+    const extractMarcacionesCode = (lines) => {
+      // 1. Etiqueta "código" en la misma línea que el valor
+      for (const line of lines) {
+        // Exige que haya números en la coincidencia para evitar palabras como "APELLIDO"
+        const labeled = line.match(/c[oó]digo[^a-z0-9]*([a-z]{0,2}[0-9]{3,6})\b/i);
+        if (labeled) return labeled[1].toUpperCase();
+      }
+
+      // 2. Línea entera que sea solo el código
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (/^[a-z]{0,2}[0-9]{3,6}$/i.test(trimmed)) {
+          return trimmed.toUpperCase();
+        }
+      }
+
+      // 3. Inicio de una fila en la tabla de datos (Código seguido de nombre)
+      for (const line of lines) {
+        // Captura el código al inicio de la línea seguido de un espacio y una letra mayúscula
+        const tableRow = line.match(/^([a-z]{0,2}[0-9]{3,6})\s+[A-Z]/i);
+        if (tableRow) {
+          return tableRow[1].toUpperCase();
+        }
+      }
+
+      // 4. Fallback: buscar palabras aisladas que parezcan un código
+      for (const line of lines) {
+        // Exigimos 5-6 números para evitar años como 2026
+        const fallback = line.match(/\b([a-z]{0,2}[0-9]{5,6})\b/i);
+        if (fallback) {
+          return fallback[1].toUpperCase();
+        }
+      }
+
+      return '';
+    };
+
+    const extractWeekData = (lines) => {
+      const weekData = {};
+      for (const line of lines) {
+        const startMatch = line.match(/^(\d{2})(\d{4})\s+(.*)/);
+        if (startMatch) {
+          const weekStr = startMatch[1];
+          const rest = startMatch[3];
+          const week = parseInt(weekStr, 10);
+          
+          const getVal = (regex) => {
+            const m = rest.match(regex);
+            return m ? m[1] : '';
+          };
+          
+          const horas = getVal(/Horas\s*:\s*([\d.]+)/i);
+          const feriado = getVal(/H\.Feriado\s*:\s*([\d.]+)/i);
+          const he25 = getVal(/H\.E\.\s*25%\s*:\s*([\d.]+)/i);
+          const he35 = getVal(/H\.E\.\s*3[05]%\s*:\s*([\d.]+)/i);
+          
+          if (horas || feriado || he25 || he35) {
+            weekData[week] = { horas, feriado, he25, he35 };
+          }
+        }
+      }
+      return weekData;
+    };
+
+    const extractMarcacionesDni = (lines) => {
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (/d\.?\s*n\.?\s*i\.?/i.test(line)) {
+          const match = line.match(/\b(\d{8})\b/);
+          if (match) return match[1];
+          for (let j = i + 1; j <= i + 3 && j < lines.length; j++) {
+            const matchNext = lines[j].match(/\b(\d{8})\b/);
+            if (matchNext) return matchNext[1];
+          }
+        }
+      }
+      for (const line of lines) {
+        const match = line.match(/\b(\d{8})\b/);
+        if (match) return match[1];
+      }
+      return '';
+    };
+
+    const parseMarcacionesPdf = async (file) => {
+      const pdfjs = await loadPdfJs();
+      const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+      const codes = [];
+      const seenCodes = new Set();
+
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        const page = await pdf.getPage(pageNumber);
+        const textContent = await page.getTextContent({ normalizeWhitespace: true });
+        const lines = extractPdfLines(textContent);
+        const codigo = extractMarcacionesCode(lines);
+        const dni = extractMarcacionesDni(lines);
+        const weekData = extractWeekData(lines);
+
+        if (codigo) {
+          const normalized = normalizeMarcacionesCode(codigo);
+          if (normalized && !seenCodes.has(normalized)) {
+            seenCodes.add(normalized);
+            codes.push({
+              code: normalized,
+              display: codigo,
+              dni: dni,
+              page: pageNumber,
+              weekData: weekData,
+            });
+          }
+        }
+      }
+
+      return codes;
+    };
+
+    const findMarcacionesCodeKey = (row) => {
+      if (!row) return null;
+
+      const candidates = ['codigo', 'código', 'cod', 'codig', 'codigo2'];
+      const keys = Object.keys(row);
+
+      for (const key of keys) {
+        const normalizedKey = normalize(key);
+        if (candidates.some(candidate => normalizedKey === normalize(candidate))) {
+          return key;
+        }
+      }
+
+      return keys[0] || null;
+    };
+
+    const readMarcacionesExcel = async (file) => {
+      const arrayBuffer = await file.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
+      let fallbackResult = null;
+
+      for (const sheetName of workbook.SheetNames) {
+        const worksheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(worksheet, { defval: '', raw: false });
+
+        if (!rows.length) continue;
+
+        const headers = Array.from(
+          rows.reduce((acc, row) => {
+            Object.keys(row).forEach((key) => acc.add(key));
+            return acc;
+          }, new Set())
+        );
+
+        const codeKey = findMarcacionesCodeKey(rows[0]);
+        if (!codeKey) {
+          if (!fallbackResult) {
+            fallbackResult = {
+              sheetName,
+              rows,
+              headers,
+              codeKey: null,
+            };
+          }
+          continue;
+        }
+
+        return {
+          sheetName,
+          rows,
+          headers,
+          codeKey,
+        };
+      }
+
+      if (fallbackResult) {
+        return fallbackResult;
+      }
+
+      return {
+        sheetName: '',
+        rows: [],
+        headers: [],
+        codeKey: null,
+      };
+    };
+
+    const buildMarcacionesHeaders = (rows, preferredOrder = []) => {
+      const headerSet = new Set();
+      const headers = [];
+
+      preferredOrder.forEach((header) => {
+        if (header && !headerSet.has(header) && !header.startsWith('__')) {
+          headerSet.add(header);
+          headers.push(header);
+        }
+      });
+
+      rows.forEach((row) => {
+        Object.keys(row).forEach((key) => {
+          if (key.startsWith('__')) return;
+          if (!headerSet.has(key)) {
+            headerSet.add(key);
+            headers.push(key);
+          }
+        });
+      });
+
+      return headers;
+    };
+
+    const renderMarcacionesTable = (rows, headers) => {
+      if (!rows.length) {
+        marcacionesTableWrap.innerHTML = '<div class="empty">No se encontraron filas del Excel que coincidan con el código del PDF.</div>';
+        return;
+      }
+
+      const bodyHtml = rows
+        .map((row) => {
+          const rowClass = row.__matched ? 'marcacion-match' : '';
+          const classAttr = rowClass ? ` class="${rowClass}"` : '';
+
+          return `<tr${classAttr}>${headers.map((header) => `<td>${escapeHtml(row[header])}</td>`).join('')}</tr>`;
+        })
+        .join('');
+
+      marcacionesTableWrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join('')}</tr>
+          </thead>
+          <tbody>${bodyHtml}</tbody>
+        </table>
+      `;
+    };
+
+    const reconcileMarcaciones = () => {
+      const pdfCodes = marcacionesState.pdfCodes.map((item) => item.code).filter(Boolean);
+      const pdfCodeSet = new Set(pdfCodes);
+      const excelRows = marcacionesState.excelRows;
+      const codeKey = marcacionesState.excelCodeKey;
+
+      if (!pdfCodeSet.size || !excelRows.length || !codeKey) {
+        marcacionesState.pdfCodeMatches = new Set();
+        marcacionesState.matchedRows = [];
+        marcacionesState.excelHeaders = buildMarcacionesHeaders(excelRows, marcacionesState.excelHeaders);
+        if (!pdfCodeSet.size) {
+          marcacionesState.message = marcacionesState.message || 'Sube la boleta PDF para extraer el código.';
+        } else if (!excelRows.length) {
+          marcacionesState.message = marcacionesState.message || 'Sube la hoja de cÁlculo para buscar el código del PDF.';
+        } else if (!codeKey) {
+          marcacionesState.message = 'No se encontró una columna de código en la hoja de cÁlculo.';
+        }
+        renderMarcacionesView();
+        return;
+      }
+
+      const matchedRows = [];
+      const foundCodes = new Set();
+
+      excelRows.forEach((row) => {
+        const rowCode = normalizeMarcacionesCode(row[codeKey]);
+        if (!rowCode || !pdfCodeSet.has(rowCode)) {
+          return;
+        }
+
+        const diaKey = Object.keys(row).find(k => normalize(k) === normalize('dia'));
+        if (diaKey && normalize(row[diaKey]) === normalize('tot')) {
+          return;
+        }
+
+        const pdfData = marcacionesState.pdfCodes.find(item => item.code === rowCode);
+        const pdfDni = pdfData ? pdfData.dni : '';
+        const pdfWeekData = pdfData && pdfData.weekData ? pdfData.weekData : {};
+
+        foundCodes.add(rowCode);
+        
+        const fechaKey = Object.keys(row).find(k => normalize(k) === normalize('fecha'));
+        const parsedDate = fechaKey ? parseDateValue(row[fechaKey]) : null;
+        const weekNumVal = parsedDate ? getWeekNumber(parsedDate) : '';
+        const weekText = weekNumVal ? `Semana: ${weekNumVal}` : '';
+
+        const parseTime = (val) => {
+          if (val === null || val === undefined || val === '') return null;
+          if (typeof val === 'number') return Math.round(val * 24 * 60);
+          if (val instanceof Date) return val.getHours() * 60 + val.getMinutes();
+          const str = String(val).trim();
+          const parts = str.split(':');
+          if (parts.length >= 2) return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+          return null;
+        };
+
+        const entrada1Key = Object.keys(row).find(k => normalize(k) === normalize('entrada1'));
+        const salida1Key = Object.keys(row).find(k => normalize(k) === normalize('salida1') || normalize(k) === normalize('salida'));
+        const e1Mins = entrada1Key ? parseTime(row[entrada1Key]) : null;
+        const s1Mins = salida1Key ? parseTime(row[salida1Key]) : null;
+        
+        let resultado = '';
+        if (e1Mins !== null && s1Mins !== null && s1Mins >= e1Mins) {
+          const diff = s1Mins - e1Mins;
+          const day = parsedDate ? parsedDate.getDay() : null;
+          let appliedFixed = false;
+          
+          if (day !== null) {
+            if (day >= 1 && day <= 5) {
+              if (s1Mins > (16 * 60 + 51) || (s1Mins > (4 * 60 + 51) && s1Mins < 720)) {
+                resultado = '8:36';
+                appliedFixed = true;
+              }
+            } else if (day === 6) {
+              if (s1Mins > (12 * 60)) {
+                resultado = '5:00';
+                appliedFixed = true;
+              }
+            }
+          }
+          
+          if (!appliedFixed) {
+            if (diff > 600 && day === null) {
+              resultado = '8:36';
+            } else {
+              const h = Math.floor(diff / 60);
+              const m = diff % 60;
+              resultado = `${h}:${m.toString().padStart(2, '0')}`;
+            }
+          }
+        }
+
+        let he = '';
+        if (s1Mins !== null) {
+          const day = parsedDate ? parsedDate.getDay() : null;
+          if (day !== null) {
+            let heHours = 0;
+            if (day >= 1 && day <= 5) {
+              heHours = Math.floor((s1Mins - (16 * 60 + 51)) / 60);
+            } else if (day === 6) {
+              heHours = Math.floor((s1Mins - (12 * 60 + 30)) / 60);
+            }
+            if (heHours > 0) {
+              he = heHours.toString();
+            }
+          }
+        }
+
+        const newRow = {};
+        let insertedDni = false;
+        let insertedSemana = false;
+        let insertedResultado = false;
+        
+        for (const [key, value] of Object.entries(row)) {
+          newRow[key] = value;
+          const normKey = normalize(key);
+          
+          if (!insertedDni && normKey === normalize('trabajador')) {
+            newRow['DNI'] = pdfDni;
+            insertedDni = true;
+          }
+          
+          if (!insertedSemana && (normKey === 'centrocosto' || normKey === 'centrocostos')) {
+            newRow['SEMANA'] = weekText;
+            insertedSemana = true;
+          }
+          
+          if (!insertedResultado && normKey === normalize('salida1')) {
+            newRow['RESULTADO'] = resultado;
+            newRow['HE'] = he;
+            insertedResultado = true;
+          }
+        }
+        
+        if (!insertedDni) {
+          newRow['DNI'] = pdfDni;
+        }
+        if (!insertedSemana) {
+          newRow['SEMANA'] = weekText;
+        }
+        if (!insertedResultado) {
+          newRow['RESULTADO'] = resultado;
+          newRow['HE'] = he;
+        }
+        
+        const currentWeekData = weekNumVal && pdfWeekData[weekNumVal] ? pdfWeekData[weekNumVal] : { horas: '', feriado: '', he25: '', he35: '' };
+        newRow['Horas'] = currentWeekData.horas;
+        newRow['Feriado'] = currentWeekData.feriado;
+        newRow['HE 25%'] = currentWeekData.he25;
+        newRow['HE 30%'] = currentWeekData.he35;
+        
+        newRow.__matched = true;
+        matchedRows.push(newRow);
+      });
+
+      marcacionesState.pdfCodeMatches = foundCodes;
+      marcacionesState.matchedRows = matchedRows;
+      
+      let finalHeaders = buildMarcacionesHeaders(matchedRows.length ? matchedRows : excelRows, marcacionesState.excelHeaders);
+      
+      const trabajadorIdx = finalHeaders.findIndex(h => normalize(h) === normalize('trabajador'));
+      const dniIdx = finalHeaders.indexOf('DNI');
+      
+      if (trabajadorIdx !== -1 && dniIdx !== -1 && dniIdx !== trabajadorIdx + 1) {
+        finalHeaders.splice(dniIdx, 1);
+        finalHeaders.splice(trabajadorIdx + 1, 0, 'DNI');
+      }
+
+      const centroCostosIdx = finalHeaders.findIndex(h => normalize(h) === 'centrocosto' || normalize(h) === 'centrocostos');
+      const semanaIdx = finalHeaders.indexOf('SEMANA');
+
+      if (centroCostosIdx !== -1 && semanaIdx !== -1 && semanaIdx !== centroCostosIdx + 1) {
+        finalHeaders.splice(semanaIdx, 1);
+        finalHeaders.splice(centroCostosIdx + (finalHeaders.indexOf('DNI') !== -1 && finalHeaders.indexOf('DNI') < centroCostosIdx && dniIdx > centroCostosIdx ? 0 : 1), 0, 'SEMANA');
+        // A simpler insertion without index offset bugs:
+        // Actually, just find the current indices again:
+      }
+      
+      // Let's do it safely by repeatedly finding indices:
+      // We already did DNI. Now let's do SEMANA.
+      const ccIdx2 = finalHeaders.findIndex(h => normalize(h) === 'centrocosto' || normalize(h) === 'centrocostos');
+      const semIdx2 = finalHeaders.indexOf('SEMANA');
+      if (ccIdx2 !== -1 && semIdx2 !== -1 && semIdx2 !== ccIdx2 + 1) {
+        finalHeaders.splice(semIdx2, 1);
+        const adjustedCcIdx = finalHeaders.findIndex(h => normalize(h) === 'centrocosto' || normalize(h) === 'centrocostos');
+        finalHeaders.splice(adjustedCcIdx + 1, 0, 'SEMANA');
+      }
+      
+      const salida1Idx = finalHeaders.findIndex(h => normalize(h) === normalize('salida1'));
+      const resultadoIdx = finalHeaders.indexOf('RESULTADO');
+      
+      if (salida1Idx !== -1) {
+        if (resultadoIdx !== -1) {
+          finalHeaders.splice(resultadoIdx, 1);
+        }
+        
+        const newSalida1Idx = finalHeaders.findIndex(h => normalize(h) === normalize('salida1'));
+        finalHeaders = finalHeaders.slice(0, newSalida1Idx + 1)
+          .concat(['RESULTADO'])
+          .concat(finalHeaders.slice(newSalida1Idx + 1).filter(h => !['HE', 'Horas', 'Feriado', 'HE 25%', 'HE 30%'].includes(h)));
+      }
+      
+      const colsToMove = ['HE', 'Horas', 'Feriado', 'HE 25%', 'HE 30%'];
+      finalHeaders = finalHeaders.filter(h => !colsToMove.includes(h));
+      
+      const finalResultadoIdx = finalHeaders.indexOf('RESULTADO');
+      if (finalResultadoIdx !== -1) {
+        finalHeaders.splice(finalResultadoIdx + 1, 0, ...colsToMove);
+      } else {
+        finalHeaders.push(...colsToMove);
+      }
+
+      // Truncar desde 'entrada2' en adelante (incluyendo salida2, entrada3, salida3, etc.)
+      const entrada2Idx = finalHeaders.findIndex(h => normalize(h) === normalize('entrada2'));
+      if (entrada2Idx !== -1) {
+        // Solo conservar los computed columns que vengan después si los hubiera
+        const colsToKeepAtEnd = colsToMove.filter(c => finalHeaders.indexOf(c) >= entrada2Idx);
+        finalHeaders = finalHeaders.slice(0, entrada2Idx);
+        finalHeaders.push(...colsToKeepAtEnd.filter(c => !finalHeaders.includes(c)));
+      }
+
+      marcacionesState.excelHeaders = finalHeaders;
+      
+      renderMarcacionesView();
+    };
+
+    const renderMarcacionesView = () => {
+      const pdfCodes = marcacionesState.pdfCodes;
+      const matchedRows = marcacionesState.matchedRows;
+      const rowCount = matchedRows.length;
+      const codeList = pdfCodes.map((item) => item.display || item.code).filter(Boolean);
+      const matchedCodeCount = marcacionesState.pdfCodeMatches.size;
+
+      if (marcacionesState.message) {
+        marcacionesStatus.textContent = marcacionesState.message;
+      } else {
+        const statusParts = [];
+        if (marcacionesState.pdfFileName) {
+          statusParts.push(`Boleta: ${marcacionesState.pdfFileName}`);
+        }
+        if (marcacionesState.excelFileName) {
+          statusParts.push(`Marcación: ${marcacionesState.excelFileName}`);
+        }
+        if (codeList.length) {
+          statusParts.push(`Código PDF: ${codeList.join(', ')}`);
+        }
+        if (rowCount) {
+          statusParts.push(`Filas encontradas: ${rowCount}`);
+        }
+        if (matchedCodeCount) {
+          statusParts.push(`Códigos encontrados en Excel: ${matchedCodeCount}`);
+        }
+        marcacionesStatus.textContent = statusParts.length
+          ? statusParts.join('\n')
+          : 'Sube la boleta PDF para extraer el código.';
+      }
+
+      if (!matchedRows.length) {
+        marcacionesSummary.textContent = codeList.length
+          ? `Código PDF detectado: ${codeList.join(', ')}`
+          : 'Sube la boleta PDF para extraer el código.';
+        const emptyMessage = marcacionesState.excelRows.length && pdfCodes.length
+          ? `No se encontraron filas con ese código en la hoja ${marcacionesState.excelSheetName || 'cargada'}.`
+          : 'La tabla aparecerá cuando cargues la hoja de cÁlculo con ese código.';
+        marcacionesTableWrap.innerHTML = `<div class="empty">${escapeHtml(emptyMessage)}</div>`;
+        return;
+      }
+
+      const summaryParts = [
+        `Código PDF: ${codeList.join(', ') || 'no detectado'}`,
+        `Filas encontradas: ${rowCount}`,
+      ];
+      if (marcacionesState.excelSheetName) {
+        summaryParts.push(`Hoja: ${marcacionesState.excelSheetName}`);
+      }
+      marcacionesSummary.textContent = summaryParts.join(' | ');
+      renderMarcacionesTable(matchedRows, marcacionesState.excelHeaders);
+      exportMarcacionesButton.disabled = false;
+    };
+
+    const exportMarcacionesExcel = async () => {
+      const rows = marcacionesState.matchedRows;
+      if (!rows.length) return;
+
+      if (typeof ExcelJS === 'undefined') {
+        alert('No se pudo cargar la librería de exportación.');
+        return;
+      }
+
+      // â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      const dayNames = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+      const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+      const getKey = (row, candidates) => {
+        for (const k of Object.keys(row)) {
+          if (candidates.some(c => normalize(k) === normalize(c))) return k;
+        }
+        return null;
+      };
+
+      const fmt = (val) => (val === null || val === undefined || val === '') ? '' : String(val);
+
+      // Detect document month from the month-year that appears most often in the rows
+      let docMonth = '', docYear = '';
+      const monthCounts = new Map();
+      const monthOrder = new Map();
+      let monthOrderIndex = 0;
+
+      for (const r of rows) {
+        const fk = getKey(r, ['fecha']);
+        const d = fk ? parseDateValue(r[fk]) : null;
+        if (!d) continue;
+
+        const monthKey = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+        if (!monthCounts.has(monthKey)) {
+          monthCounts.set(monthKey, {
+            count: 0,
+            month: d.getMonth(),
+            year: d.getFullYear(),
+          });
+          monthOrder.set(monthKey, monthOrderIndex++);
+        }
+
+        monthCounts.get(monthKey).count += 1;
+      }
+
+      let selectedMonth = null;
+      let selectedKey = null;
+      for (const [key, info] of monthCounts.entries()) {
+        if (
+          !selectedMonth ||
+          info.count > selectedMonth.count ||
+          (info.count === selectedMonth.count && monthOrder.get(key) < monthOrder.get(selectedKey))
+        ) {
+          selectedMonth = info;
+          selectedKey = key;
+        }
+      }
+
+      if (selectedMonth) {
+        docMonth = monthNames[selectedMonth.month].toUpperCase();
+        docYear = selectedMonth.year;
+      }
+
+      const docTitle = `RECORD DE ASISTENCIA ${docMonth} – ${docYear}`.trim();
+
+      // â”€â”€ Group: by worker code, then by semana â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      const workerMap = new Map();   // codeKey -> { info, weekMap }
+
+      rows.forEach(r => {
+        const codeK = getKey(r, ['codigo','código','cod','codigo2']);
+        const trabK  = getKey(r, ['trabajador','nombres','nombre']);
+        const cargoK = getKey(r, ['cargo_trab', 'cargo trab', 'categoria', 'categ', 'puesto', 'cargo']);
+        const dniK   = getKey(r, ['dni']);
+        const ccK    = getKey(r, ['centrocosto','centrocostos','centro costo']);
+        const fechaK = getKey(r, ['fecha']);
+
+        const workerCode = fmt(r[codeK] ?? '');
+        if (!workerCode) return;
+
+        if (!workerMap.has(workerCode)) {
+          workerMap.set(workerCode, {
+            code: workerCode,
+            nombre: fmt(r[trabK] ?? ''),
+            cargo: fmt(r[cargoK] ?? ''),
+            dni: fmt(r[dniK] ?? (r['DNI'] ?? '')),
+            centroCosto: fmt(r[ccK] ?? ''),
+            weekMap: new Map(),
+          });
+        }
+
+        const worker = workerMap.get(workerCode);
+        const parsedDate = fechaK ? parseDateValue(r[fechaK]) : null;
+        const wn = parsedDate ? getWeekNumber(parsedDate) : 0;
+
+        if (!worker.weekMap.has(wn)) {
+          worker.weekMap.set(wn, { weekNum: wn, rows: [] });
+        }
+        worker.weekMap.get(wn).rows.push({ ...r, __parsedDate: parsedDate });
+      });
+
+      const workerEntries = [...workerMap.values()];
+      if (!workerEntries.length) {
+        alert('No se encontraron datos de trabajador para exportar.');
+        return;
+      }
+
+      const wb = new ExcelJS.Workbook();
+      wb.creator = 'Sistema RRHH';
+      wb.created = new Date();
+      wb.modified = new Date();
+      wb.company = 'CITITEX SAC';
+      wb.title = docTitle;
+      wb.subject = docTitle;
+
+      const ws = wb.addWorksheet('Hoja2', {
+        pageSetup: {
+          orientation: 'portrait',
+          fitToPage: true,
+          fitToWidth: 1,
+          fitToHeight: 0,
+        },
+      });
+      ws.pageMargins = {
+        left: 0.7,
+        right: 0.7,
+        top: 0.75,
+        bottom: 0.75,
+        header: 0.3,
+        footer: 0.3,
+      };
+      ws.getColumn(10).width = 11;
+      ws.getColumn(11).width = 11;
+      ws.getColumn(12).width = 11;
+      ws.getColumn(13).width = 11;
+      ws.getColumn(14).width = 11;
+      ws.getColumn(15).width = 11;
+      ws.getColumn(16).width = 11;
+      ws.getRow(5).height = 15.75;
+      ws.getRow(6).height = 19.5;
+
+      const font = (size, bold = false) => ({
+        name: 'Calibri',
+        size,
+        bold,
+        color: { argb: '000000' },
+      });
+      const setStyle = (cell, options = {}) => {
+        if (options.font) cell.font = options.font;
+        if (options.alignment) cell.alignment = options.alignment;
+        if (options.fill) cell.fill = options.fill;
+        if (options.border) cell.border = options.border;
+        if (options.numFmt) cell.numFmt = options.numFmt;
+      };
+      const thinBorder = {
+        top: { style: 'thin', color: { argb: '000000' } },
+        left: { style: 'thin', color: { argb: '000000' } },
+        bottom: { style: 'thin', color: { argb: '000000' } },
+        right: { style: 'thin', color: { argb: '000000' } },
+      };
+      const styles = {
+        ruc: {
+          font: font(12, true),
+          alignment: { horizontal: 'left', vertical: 'middle' },
+        },
+        title: {
+          font: font(15, true),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+          fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D9E3F0' } },
+          border: thinBorder,
+        },
+        code: {
+          font: font(10, true),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+        },
+        worker: {
+          font: font(10, true),
+          alignment: { horizontal: 'left', vertical: 'middle' },
+        },
+        dniLabel: {
+          font: font(10, true),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+        },
+        dni: {
+          font: font(10, false),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+        },
+        cargo: {
+          font: font(10, true),
+          alignment: { horizontal: 'left', vertical: 'middle' },
+        },
+        headerSmall: {
+          font: font(7, true),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+        },
+        headerWrap: {
+          font: font(7, true),
+          alignment: { horizontal: 'center', vertical: 'middle', wrapText: true },
+        },
+        headerHours: {
+          font: font(9, false),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+        },
+        weekLabel: {
+          font: font(9, true),
+          alignment: { horizontal: 'left', vertical: 'middle' },
+        },
+        day: {
+          font: font(9, false),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+        },
+        date: {
+          font: font(9, false),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+          numFmt: 'dd/mm/yyyy',
+        },
+        time: {
+          font: font(9, false),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+        },
+        total: {
+          font: font(9, false),
+          alignment: { horizontal: 'center', vertical: 'middle' },
+        },
+      };
+
+      const loadLogoBase64 = async () => {
+        try {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          const base64 = await new Promise((resolve, reject) => {
+            img.onload = () => {
+              try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth || img.width;
+                canvas.height = img.naturalHeight || img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                resolve(canvas.toDataURL('image/jpeg', 1).split(',')[1]);
+              } catch (error) {
+                reject(error);
+              }
+            };
+            img.onerror = () => reject(new Error('No se pudo cargar la imagen marca_logo.jpeg.'));
+            img.src = 'marca_logo.jpeg';
+          });
+          return base64;
+        } catch {
+          return null;
+        }
+      };
+
+      const setEmpty = (cell) => {
+        cell.value = null;
+      };
+
+      const parseMaybeNumber = (val) => {
+        if (val === null || val === undefined || val === '') return '';
+        const num = Number(val);
+        return Number.isFinite(num) ? num : String(val);
+      };
+
+      const parseClockMinutes = (value) => {
+        if (value === null || value === undefined || value === '') return null;
+        const parts = String(value).trim().split(':');
+        if (parts.length < 2) return null;
+        const hours = Number(parts[0]);
+        const minutes = Number(parts[1]);
+        if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+        return (hours * 60) + minutes;
+      };
+
+      const formatClockMinutes = (minutes) => {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+      };
+
+      const randomizeEntryTime = (value) => {
+        const minutes = parseClockMinutes(value);
+        if (minutes === null) return '';
+        const minAllowed = 7 * 60 + 24;
+        const maxAllowed = 7 * 60 + 30;
+        if (minutes >= minAllowed && minutes <= maxAllowed) {
+          return formatClockMinutes(minutes);
+        }
+        const randomMinutes = minAllowed + Math.floor(Math.random() * (maxAllowed - minAllowed + 1));
+        return formatClockMinutes(randomMinutes);
+      };
+
+      const randomizeExitTime = (value, parsedDate) => {
+        const minutes = parseClockMinutes(value);
+        if (minutes === null) return '';
+
+        const hour = Math.floor(minutes / 60);
+        const minute = minutes % 60;
+        const day = parsedDate ? parsedDate.getDay() : null;
+
+        const formatWithMinute = (targetMinute) => `${String(hour).padStart(2, '0')}:${String(targetMinute).padStart(2, '0')}`;
+        const pickLowerCandidate = (candidateMinutes) => {
+          const lowerCandidates = candidateMinutes.filter((candidate) => candidate < minutes);
+          if (!lowerCandidates.length) return null;
+          return lowerCandidates[Math.floor(Math.random() * lowerCandidates.length)];
+        };
+
+        if (day !== null && day >= 1 && day <= 5) {
+          if (minute >= 51 || minute <= 5) {
+            return formatClockMinutes(minutes);
+          }
+
+          const candidateMinutes = [];
+          for (let m = 0; m <= 5; m++) {
+            candidateMinutes.push((hour * 60) + m);
+          }
+          if (hour > 0) {
+            for (let m = 51; m <= 59; m++) {
+              candidateMinutes.push(((hour - 1) * 60) + m);
+            }
+          }
+
+          const targetMinutes = pickLowerCandidate(candidateMinutes);
+          if (targetMinutes !== null) {
+            return formatClockMinutes(targetMinutes);
+          }
+
+          return formatWithMinute(Math.max(0, Math.min(minute, 5)));
+        }
+
+        if (day === 6) {
+          if (minute >= 30 && minute <= 40) {
+            return formatClockMinutes(minutes);
+          }
+
+          const candidateMinutes = [];
+          for (let m = 30; m <= 40; m++) {
+            candidateMinutes.push((hour * 60) + m);
+          }
+          if (hour > 0) {
+            for (let m = 30; m <= 40; m++) {
+              candidateMinutes.push(((hour - 1) * 60) + m);
+            }
+          }
+
+          const targetMinutes = pickLowerCandidate(candidateMinutes);
+          if (targetMinutes !== null) {
+            return formatClockMinutes(targetMinutes);
+          }
+
+          return formatWithMinute(Math.min(minute, 40));
+        }
+
+        return formatClockMinutes(minutes);
+      };
+
+      const shouldHighlightExitTime = (value, parsedDate) => {
+        const minutes = parseClockMinutes(value);
+        if (minutes === null) return false;
+
+        const day = parsedDate ? parsedDate.getDay() : null;
+        const minute = minutes % 60;
+
+        if (day !== null && day >= 1 && day <= 5) {
+          return !(minute >= 51 || minute <= 5);
+        }
+
+        if (day === 6) {
+          return !(minute >= 30 && minute <= 40);
+        }
+
+        return false;
+      };
+
+      const shouldHighlightEntryTime = (value) => {
+        const minutes = parseClockMinutes(value);
+        if (minutes === null) return false;
+        const minute = minutes % 60;
+        return !(minute >= 24 && minute <= 30 && Math.floor(minutes / 60) === 7);
+      };
+
+      const excelSerialFromDate = (date) => {
+        const utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+        const excelEpoch = Date.UTC(1899, 11, 30);
+        return Math.round((utc - excelEpoch) / 86400000);
+      };
+
+      const writeWorkerSection = (worker, startRow) => {
+        let row = startRow;
+        const weeks = [...worker.weekMap.values()].sort((a, b) => a.weekNum - b.weekNum).slice(0, 5);
+
+        ws.mergeCells(row, 3, row, 6);
+        ws.getCell(row, 2).value = worker.code;
+        setStyle(ws.getCell(row, 2), styles.code);
+        ws.getCell(row, 3).value = worker.nombre;
+        setStyle(ws.getCell(row, 3), styles.worker);
+        ws.getCell(row, 7).value = 'DNI';
+        setStyle(ws.getCell(row, 7), styles.dniLabel);
+        ws.getCell(row, 8).value = worker.dni;
+        setStyle(ws.getCell(row, 8), styles.dni);
+        setEmpty(ws.getCell(row, 9));
+        row += 1;
+
+        ws.mergeCells(row, 3, row, 6);
+        ws.getCell(row, 2).value = 'CARGO:';
+        setStyle(ws.getCell(row, 2), styles.cargo);
+        ws.getCell(row, 3).value = worker.cargo;
+        setStyle(ws.getCell(row, 3), styles.cargo);
+        row += 2;
+
+        ws.mergeCells(row, 2, row, 3);
+        ws.getCell(row, 2).value = 'FECHA';
+        setStyle(ws.getCell(row, 2), styles.headerSmall);
+        ws.getCell(row, 4).value = 'JORNADA DE\nINGRESO';
+        setStyle(ws.getCell(row, 4), styles.headerWrap);
+        ws.getCell(row, 5).value = 'JORNADA DE\nSALIDA';
+        setStyle(ws.getCell(row, 5), styles.headerWrap);
+        ws.getCell(row, 6).value = 'HORAS\nNORMALES';
+        setStyle(ws.getCell(row, 6), styles.headerWrap);
+        ws.getCell(row, 7).value = 'PERMI.';
+        setStyle(ws.getCell(row, 7), styles.headerSmall);
+        ws.getCell(row, 8).value = 'REFRIG.';
+        setStyle(ws.getCell(row, 8), styles.headerSmall);
+        setEmpty(ws.getCell(row, 9));
+        setStyle(ws.getCell(row, 9), styles.headerSmall);
+        ws.getCell(row, 10).value = 'entrada1';
+        setStyle(ws.getCell(row, 10), styles.headerSmall);
+        ws.getCell(row, 11).value = 'salida1';
+        setStyle(ws.getCell(row, 11), styles.headerSmall);
+        ws.getCell(row, 12).value = 'Horas';
+        setStyle(ws.getCell(row, 12), styles.headerHours);
+        ws.getCell(row, 13).value = 'feriado';
+        setStyle(ws.getCell(row, 13), styles.headerSmall);
+        ws.getCell(row, 14).value = 'He 25%';
+        setStyle(ws.getCell(row, 14), styles.headerSmall);
+        ws.getCell(row, 15).value = 'He 30%';
+        setStyle(ws.getCell(row, 15), styles.headerSmall);
+        ws.getCell(row, 16).value = 'HE';
+        setStyle(ws.getCell(row, 16), styles.headerSmall);
+        ws.getRow(row).height = 18;
+        row += 2;
+
+        for (let weekIndex = 0; weekIndex < 5; weekIndex++) {
+          const week = weeks[weekIndex] || null;
+          const summaryRow = row;
+          ws.mergeCells(summaryRow, 2, summaryRow, 3);
+          ws.getCell(summaryRow, 2).value = week ? `SEMANA: ${week.weekNum}` : '';
+          setStyle(ws.getCell(summaryRow, 2), styles.weekLabel);
+          [4, 5, 6, 7, 8, 9, 10, 11].forEach((col) => {
+            setEmpty(ws.getCell(summaryRow, col));
+          });
+
+          const firstWeekRow = week && week.rows.length ? week.rows[0] : null;
+          const totals = firstWeekRow ? {
+            horas: parseMaybeNumber(firstWeekRow.Horas),
+            feriado: parseMaybeNumber(firstWeekRow.Feriado),
+            he25: parseMaybeNumber(firstWeekRow['HE 25%']),
+            he30: parseMaybeNumber(firstWeekRow['HE 30%']),
+          } : {
+            horas: '',
+            feriado: '',
+            he25: '',
+            he30: '',
+          };
+          const heTotal = week && week.rows.length
+            ? week.rows.reduce((sum, rowItem) => {
+                const value = Number(rowItem.HE);
+                return Number.isFinite(value) ? sum + value : sum;
+              }, 0)
+            : 0;
+          const heTotalValue = week && week.rows.length ? heTotal : null;
+
+          [[12, totals.horas], [13, totals.feriado], [14, totals.he25], [15, totals.he30], [16, heTotalValue]].forEach(([col, value]) => {
+            const cell = ws.getCell(summaryRow, col);
+            cell.value = value === '' ? null : value;
+            setStyle(cell, styles.total);
+          });
+          row += 1;
+
+          const dayRows = week
+            ? [...week.rows].sort((a, b) => {
+                const da = a.__parsedDate ? a.__parsedDate.getTime() : 0;
+                const db = b.__parsedDate ? b.__parsedDate.getTime() : 0;
+                return da - db;
+              })
+            : [];
+
+          for (let dayIndex = 0; dayIndex < 6; dayIndex++) {
+            const entry = dayRows[dayIndex];
+            const dayRow = row;
+
+            if (entry && entry.__parsedDate) {
+              const parsedDate = entry.__parsedDate;
+              const dayName = dayNames[parsedDate.getDay()] || '';
+              const entK = getKey(entry, ['entrada1', 'entrada']);
+              const salK = getKey(entry, ['salida1', 'salida']);
+              const resultadoVal = fmt(entry['RESULTADO'] ?? '');
+              const entValue = entK ? fmt(entry[entK]) : '';
+              const salValue = salK ? fmt(entry[salK]) : '';
+              const displayEntValue = randomizeEntryTime(entValue);
+              const displaySalValue = randomizeExitTime(salValue, parsedDate);
+              const highlightEntrySource = shouldHighlightEntryTime(entValue);
+              const highlightExitSource = shouldHighlightExitTime(salValue, parsedDate);
+
+              ws.getCell(dayRow, 2).value = dayName;
+              setStyle(ws.getCell(dayRow, 2), styles.day);
+
+              ws.getCell(dayRow, 3).value = excelSerialFromDate(parsedDate);
+              setStyle(ws.getCell(dayRow, 3), styles.date);
+
+              if (!entValue && !salValue) {
+                [4, 5, 6, 7, 8, 9, 10, 11, 16].forEach((col) => {
+                  setEmpty(ws.getCell(dayRow, col));
+                });
+              } else {
+                if (entValue) {
+                  ws.getCell(dayRow, 4).value = displayEntValue;
+                  setStyle(ws.getCell(dayRow, 4), styles.time);
+                } else {
+                  setEmpty(ws.getCell(dayRow, 4));
+                }
+
+                if (salValue) {
+                  ws.getCell(dayRow, 5).value = displaySalValue;
+                  setStyle(ws.getCell(dayRow, 5), styles.time);
+                } else {
+                  setEmpty(ws.getCell(dayRow, 5));
+                }
+
+                ws.getCell(dayRow, 6).value = resultadoVal;
+                setStyle(ws.getCell(dayRow, 6), styles.time);
+
+                ws.getCell(dayRow, 7).value = 0;
+                setStyle(ws.getCell(dayRow, 7), styles.time);
+                ws.getCell(dayRow, 7).numFmt = 'hh:mm';
+
+                ws.getCell(dayRow, 8).value = resultadoVal === '8:36' ? (45 / 1440) : 0;
+                setStyle(ws.getCell(dayRow, 8), styles.time);
+                ws.getCell(dayRow, 8).numFmt = 'hh:mm';
+
+                setEmpty(ws.getCell(dayRow, 9));
+
+                ws.getCell(dayRow, 10).value = entValue;
+                setStyle(ws.getCell(dayRow, 10), styles.time);
+                if (highlightEntrySource) {
+                  ws.getCell(dayRow, 10).font = {
+                    ...ws.getCell(dayRow, 10).font,
+                    color: { argb: 'FFFF0000' },
+                  };
+                }
+
+                ws.getCell(dayRow, 11).value = salValue;
+                setStyle(ws.getCell(dayRow, 11), styles.time);
+                if (highlightExitSource) {
+                  ws.getCell(dayRow, 11).font = {
+                    ...ws.getCell(dayRow, 11).font,
+                    color: { argb: 'FFFF0000' },
+                  };
+                }
+
+                const heValue = parseMaybeNumber(entry.HE);
+                ws.getCell(dayRow, 16).value = heValue === '' ? null : heValue;
+                setStyle(ws.getCell(dayRow, 16), styles.time);
+              }
+            } else {
+              [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16].forEach((col) => {
+                setEmpty(ws.getCell(dayRow, col));
+              });
+            }
+
+            row += 1;
+          }
+
+          if (weekIndex < 4) {
+            row += 1;
+          }
+        }
+
+        return row;
+      };
+
+      const logoBase64 = await loadLogoBase64();
+      if (logoBase64) {
+        const imageId = wb.addImage({ base64: logoBase64, extension: 'jpeg' });
+        ws.addImage(imageId, {
+          tl: { col: 1, row: 2 },
+          ext: { width: 153, height: 30 },
+        });
+      }
+
+      ws.mergeCells(5, 2, 5, 4);
+      ws.getCell(5, 2).value = 'RUC: 20522054331';
+      setStyle(ws.getCell(5, 2), styles.ruc);
+
+      ws.mergeCells(6, 2, 6, 8);
+      ws.getCell(6, 2).value = docTitle;
+      setStyle(ws.getCell(6, 2), styles.title);
+      ws.getCell(6, 9).value = null;
+
+      let currentRow = 8;
+      for (let index = 0; index < workerEntries.length; index++) {
+        currentRow = writeWorkerSection(workerEntries[index], currentRow);
+        if (index < workerEntries.length - 1) {
+          currentRow += 1;
+        }
+      }
+
+      const buffer = await wb.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${docTitle || 'MARCACIONES'}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    };
     const renderFiltered = (title, result, emptyMessage) => {
       const expandedRows = expandRowsByDni(loadedRows, result.rows);
       setFilteredView(title, expandedRows, result.message, emptyMessage);
@@ -1117,7 +2715,6 @@
       servicioButton.disabled = true;
       empleadosButton.disabled = true;
       exportButton.disabled = true;
-      filteredTitle.textContent = 'Selecciona un botón para ver la tabla filtrada.';
       filteredStatus.textContent = '';
       filteredTableWrap.innerHTML = '<div class="empty">La tabla filtrada aparecerá aquí al hacer clic en un botón.</div>';
       loadedRows = [];
@@ -1152,14 +2749,85 @@
         citi03Button.disabled = false;
         servicioButton.disabled = false;
         empleadosButton.disabled = false;
-        status.textContent = `Archivo cargado: ${file.name}\nHoja usada: ${sheetName}\nFilas encontradas: ${jsonData.length}`;
+        status.textContent = `Archivo cargado: ${file.name}\nHoja usada: ${sheetName}\nDNI diferentes: ${countUniqueDni(jsonData)}`;
       } catch (error) {
         status.textContent = 'Error al procesar el archivo: ' + error.message;
         exportButton.disabled = true;
       }
     });
 
+    marcacionesPdfInput.addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+
+      if (!file) {
+        marcacionesState.pdfFileName = '';
+        marcacionesState.pdfCodes = [];
+        marcacionesState.pdfCodeMatches = new Set();
+        marcacionesState.matchedRows = [];
+        marcacionesState.message = '';
+        renderMarcacionesView();
+        return;
+      }
+
+      marcacionesState.pdfFileName = file.name;
+      marcacionesState.message = 'Procesando boleta PDF...';
+      renderMarcacionesView();
+
+      try {
+        const codes = await parseMarcacionesPdf(file);
+        marcacionesState.pdfCodes = codes;
+        marcacionesState.message = codes.length
+          ? ''
+          : 'No se detectó un código útil en la boleta PDF. Si el archivo es una imagen escaneada, necesitarás OCR.';
+      } catch (error) {
+        marcacionesState.pdfCodes = [];
+        marcacionesState.message = 'Error al procesar la boleta PDF: ' + error.message;
+      }
+
+      reconcileMarcaciones();
+    });
+
+    marcacionesExcelInput.addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+
+      if (!file) {
+        marcacionesState.excelFileName = '';
+        marcacionesState.excelRows = [];
+        marcacionesState.excelHeaders = [];
+        marcacionesState.excelCodeKey = null;
+        marcacionesState.excelSheetName = '';
+        marcacionesState.matchedRows = [];
+        marcacionesState.message = '';
+        renderMarcacionesView();
+        return;
+      }
+
+      marcacionesState.excelFileName = file.name;
+      marcacionesState.message = 'Procesando hoja de cÁlculo de marcaciÓn...';
+      renderMarcacionesView();
+
+      try {
+        const excelData = await readMarcacionesExcel(file);
+        marcacionesState.excelRows = excelData.rows;
+        marcacionesState.excelHeaders = excelData.headers;
+        marcacionesState.excelCodeKey = excelData.codeKey;
+        marcacionesState.excelSheetName = excelData.sheetName;
+        marcacionesState.message = excelData.rows.length
+          ? ''
+          : 'La hoja de cÁlculo está vacía o no se pudo leer.';
+      } catch (error) {
+        marcacionesState.excelRows = [];
+        marcacionesState.excelHeaders = [];
+        marcacionesState.excelCodeKey = null;
+        marcacionesState.excelSheetName = '';
+        marcacionesState.message = 'Error al procesar la hoja de cÁlculo de marcaciÓn: ' + error.message;
+      }
+
+      reconcileMarcaciones();
+    });
+
     citi01Button.addEventListener('click', () => {
+      setActiveFilterButton(citi01Button);
       if (!loadedRows.length) {
         renderFiltered('CITI01', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
         return;
@@ -1170,6 +2838,7 @@
     });
 
     citi02Button.addEventListener('click', () => {
+      setActiveFilterButton(citi02Button);
       if (!loadedRows.length) {
         renderFiltered('CITI02', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
         return;
@@ -1180,6 +2849,7 @@
     });
 
     citi03Button.addEventListener('click', () => {
+      setActiveFilterButton(citi03Button);
       if (!loadedRows.length) {
         renderFiltered('CITI03', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
         return;
@@ -1190,6 +2860,7 @@
     });
 
     servicioButton.addEventListener('click', () => {
+      setActiveFilterButton(servicioButton);
       if (!loadedRows.length) {
         renderFiltered('SERVICIO', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
         return;
@@ -1200,6 +2871,7 @@
     });
 
     empleadosButton.addEventListener('click', () => {
+      setActiveFilterButton(empleadosButton);
       if (!loadedRows.length) {
         renderFiltered('EMPLEADOS', { rows: [], message: 'Primero sube un archivo válido.' }, 'No hay datos para filtrar.');
         return;
@@ -1220,6 +2892,34 @@
         filteredStatus.textContent = 'Error al exportar: ' + error.message;
       }
     });
+
+    openAntiguedadButton.addEventListener('click', () => showAntiguedadReport(openAntiguedadButton));
+    openMarcacionesButton.addEventListener('click', () => showMarcacionesReport(openMarcacionesButton));
+    openAsistenciaButton.addEventListener('click', () => showPlaceholderReport('Asistencia', openAsistenciaButton));
+    openVacacionesButton.addEventListener('click', () => showPlaceholderReport('Vacaciones', openVacacionesButton));
+
+    const exportMarcacionesButton = document.getElementById('exportMarcacionesButton');
+    exportMarcacionesButton.addEventListener('click', async () => {
+      exportMarcacionesButton.disabled = true;
+      exportMarcacionesButton.textContent = 'Exportando...';
+      try {
+        await exportMarcacionesExcel();
+      } catch (err) {
+        alert('Error al exportar: ' + err.message);
+      } finally {
+        exportMarcacionesButton.disabled = false;
+        exportMarcacionesButton.textContent = 'Exportar Excel';
+      }
+    });
+
+    showControl();
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
