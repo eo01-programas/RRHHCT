@@ -766,6 +766,10 @@
                   <span class="file-label">Subir marcaciÓn</span>
                   <input id="marcacionesExcelInput" type="file" accept=".ods,.xlsx,.xls,application/vnd.oasis.opendocument.spreadsheet" />
                 </label>
+                <label class="file-shell" for="marcacionesLogoInput">
+                  <span class="file-label">Subir logo</span>
+                  <input id="marcacionesLogoInput" type="file" accept=".jpg,.jpeg,image/jpeg" />
+                </label>
               </div>
               <p class="report-note">La tabla se arma con las filas del Excel/ODS que coinciden con el código detectado en la boleta PDF.</p>
             </div>
@@ -845,6 +849,7 @@
     const status = document.getElementById('status');
     const marcacionesPdfInput = document.getElementById('marcacionesPdfInput');
     const marcacionesExcelInput = document.getElementById('marcacionesExcelInput');
+    const marcacionesLogoInput = document.getElementById('marcacionesLogoInput');
     const marcacionesStatus = document.getElementById('marcacionesStatus');
     const marcacionesSummary = document.getElementById('marcacionesSummary');
     const marcacionesTableWrap = document.getElementById('marcacionesTableWrap');
@@ -887,6 +892,8 @@
       excelCodeKey: null,
       excelSheetName: '',
       matchedRows: [],
+      logoBase64: '',
+      logoFileName: '',
       message: '',
       summary: 'Sube la boleta PDF para extraer el código.',
     };
@@ -930,6 +937,13 @@
       controlScreen.hidden = false;
       reportScreen.hidden = true;
     };
+
+    const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(new Error('No se pudo leer el archivo.'));
+      reader.readAsDataURL(file);
+    });
 
     const showAntiguedadReport = (activeButton = openAntiguedadButton) => {
       reportScreen.hidden = false;
@@ -2447,32 +2461,6 @@
       wb.title = docTitle;
       wb.subject = docTitle;
 
-      const loadLogoBase64 = async () => {
-        try {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          const base64 = await new Promise((resolve, reject) => {
-            img.onload = () => {
-              try {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.naturalWidth || img.width;
-                canvas.height = img.naturalHeight || img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
-                resolve(canvas.toDataURL('image/jpeg', 1).split(',')[1]);
-              } catch (error) {
-                reject(error);
-              }
-            };
-            img.onerror = () => reject(new Error('No se pudo cargar la imagen marca_logo.jpeg.'));
-            img.src = 'marca_logo.jpeg';
-          });
-          return base64;
-        } catch {
-          return null;
-        }
-      };
-
       const ws = wb.addWorksheet('Hoja2', {
         pageSetup: {
           orientation: 'portrait',
@@ -2499,13 +2487,16 @@
       ws.getRow(5).height = 15.75;
       ws.getRow(6).height = 19.5;
 
-      const logoBase64 = await loadLogoBase64();
-      if (logoBase64) {
-        const imageId = wb.addImage({ base64: logoBase64, extension: 'jpeg' });
-        ws.addImage(imageId, {
-          tl: { col: 1, row: 1 },
-          ext: { width: 153, height: 30 },
-        });
+      if (marcacionesState.logoBase64) {
+        try {
+          const imageId = wb.addImage({ base64: marcacionesState.logoBase64, extension: 'jpeg' });
+          ws.addImage(imageId, {
+            tl: { col: 1, row: 2 },
+            ext: { width: 170, height: 34 },
+          });
+        } catch (error) {
+          console.warn('No se pudo insertar el logo en el Excel:', error);
+        }
       }
 
       const font = (size, bold = false) => ({
@@ -2535,7 +2526,7 @@
         title: {
           font: font(15, true),
           alignment: { horizontal: 'center', vertical: 'middle' },
-          fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'D9E3F0' } },
+          fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C6E0B4' } },
           border: thinBorder,
         },
         code: {
@@ -2591,32 +2582,6 @@
           font: font(9, false),
           alignment: { horizontal: 'center', vertical: 'middle' },
         },
-      };
-
-      const loadLogoBase64 = async () => {
-        try {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          const base64 = await new Promise((resolve, reject) => {
-            img.onload = () => {
-              try {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.naturalWidth || img.width;
-                canvas.height = img.naturalHeight || img.height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
-                resolve(canvas.toDataURL('image/jpeg', 1).split(',')[1]);
-              } catch (error) {
-                reject(error);
-              }
-            };
-            img.onerror = () => reject(new Error('No se pudo cargar la imagen marca_logo.jpeg.'));
-            img.src = 'marca_logo.jpeg';
-          });
-          return base64;
-        } catch {
-          return null;
-        }
       };
 
       const setEmpty = (cell) => {
@@ -2946,15 +2911,6 @@
         return row;
       };
 
-      const logoBase64 = await loadLogoBase64();
-      if (logoBase64) {
-        const imageId = wb.addImage({ base64: logoBase64, extension: 'jpeg' });
-        ws.addImage(imageId, {
-          tl: { col: 1, row: 2 },
-          ext: { width: 153, height: 30 },
-        });
-      }
-
       ws.mergeCells(5, 2, 5, 4);
       ws.getCell(5, 2).value = 'RUC: 20522054331';
       setStyle(ws.getCell(5, 2), styles.ruc);
@@ -3107,6 +3063,30 @@
       reconcileMarcaciones();
     });
 
+    marcacionesLogoInput.addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+
+      if (!file) {
+        marcacionesState.logoBase64 = '';
+        marcacionesState.logoFileName = '';
+        renderMarcacionesView();
+        return;
+      }
+
+      try {
+        const dataUrl = await readFileAsDataUrl(file);
+        marcacionesState.logoBase64 = dataUrl.includes(',') ? dataUrl.split(',')[1] : '';
+        marcacionesState.logoFileName = file.name;
+        marcacionesState.message = '';
+        renderMarcacionesView();
+      } catch (error) {
+        marcacionesState.logoBase64 = '';
+        marcacionesState.logoFileName = '';
+        marcacionesState.message = 'Error al procesar el logo: ' + error.message;
+        renderMarcacionesView();
+      }
+    });
+
     planillaFilesInput.addEventListener('change', async (event) => {
       const files = Array.from(event.target.files || []);
 
@@ -3233,6 +3213,7 @@
   </script>
 </body>
 </html>
+
 
 
 
