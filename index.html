@@ -560,6 +560,66 @@
       white-space: pre-line;
     }
 
+    .planilla-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    #planillaSummary {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    #planillaStatus {
+      white-space: pre-line;
+    }
+
+    .planilla-files {
+      display: grid;
+      gap: 16px;
+    }
+
+    .planilla-file-card {
+      padding: 18px;
+    }
+
+    .planilla-file-meta {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .planilla-file-meta strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .planilla-file-meta span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .planilla-file-stats {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      text-align: right;
+    }
+
     .card + .card {
       position: relative;
     }
@@ -621,10 +681,10 @@
             <span>Informe pendiente</span>
           </span>
         </button>
-        <button id="openAsistenciaButton" type="button">
+        <button id="openPlanillaButton" type="button">
           <span class="btn-icon" aria-hidden="true">âœ“</span>
           <span class="btn-text">
-            <strong>Asistencia</strong>
+            <strong>Planilla</strong>
             <span>Informe pendiente</span>
           </span>
         </button>
@@ -725,6 +785,37 @@
           </div>
         </div>
       </section>
+      <section class="report-view" data-report-view="planilla" hidden>
+        <div class="card hero-card">
+          <div class="hero-content">
+            <div class="hero-left">
+              <div class="hero-header">
+                <div>
+                  <h1>CONTROL DE PLANILLA</h1>
+                  <p>Selecciona uno o varios archivos de marcacion para mostrar una tabla por cada archivo, con todas las columnas detectadas.</p>
+                </div>
+              </div>
+              <label class="file-shell" for="planillaFilesInput">
+                <span class="file-label">Subir archivos</span>
+                <input id="planillaFilesInput" type="file" accept=".ods,.xlsx,.xls,application/vnd.oasis.opendocument.spreadsheet" multiple />
+              </label>
+              <p class="report-note">Cada archivo se procesa por separado y se muestra su tabla completa debajo.</p>
+            </div>
+            <div class="hero-status">
+              <div id="planillaStatus"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="planilla-head">
+            <p id="planillaSummary">Selecciona uno o varios archivos de planilla para ver sus tablas.</p>
+          </div>
+          <div id="planillaFilesList" class="planilla-files">
+            <div class="empty">Las tablas aparecerán aquí al cargar archivos.</div>
+          </div>
+        </div>
+      </section>
       <section class="report-view" data-report-view="placeholder" hidden>
         <div class="card hero-card">
           <div class="hero-header">
@@ -748,7 +839,7 @@
     const reportScreen = document.getElementById('reportScreen');
     const openAntiguedadButton = document.getElementById('openAntiguedadButton');
     const openMarcacionesButton = document.getElementById('openMarcacionesButton');
-    const openAsistenciaButton = document.getElementById('openAsistenciaButton');
+    const openPlanillaButton = document.getElementById('openPlanillaButton');
     const openVacacionesButton = document.getElementById('openVacacionesButton');
     const fileInput = document.getElementById('fileInput');
     const status = document.getElementById('status');
@@ -757,6 +848,10 @@
     const marcacionesStatus = document.getElementById('marcacionesStatus');
     const marcacionesSummary = document.getElementById('marcacionesSummary');
     const marcacionesTableWrap = document.getElementById('marcacionesTableWrap');
+    const planillaFilesInput = document.getElementById('planillaFilesInput');
+    const planillaStatus = document.getElementById('planillaStatus');
+    const planillaSummary = document.getElementById('planillaSummary');
+    const planillaFilesList = document.getElementById('planillaFilesList');
     const citi01Button = document.getElementById('citi01Button');
     const citi02Button = document.getElementById('citi02Button');
     const citi03Button = document.getElementById('citi03Button');
@@ -769,6 +864,7 @@
     const filteredTableWrap = document.getElementById('filteredTableWrap');
     const antiguedadView = document.querySelector('[data-report-view="antiguedad"]');
     const marcacionesView = document.querySelector('[data-report-view="marcaciones"]');
+    const planillaView = document.querySelector('[data-report-view="planilla"]');
     const placeholderView = document.querySelector('[data-report-view="placeholder"]');
     const placeholderReportTitle = document.getElementById('placeholderReportTitle');
     const placeholderReportText = document.getElementById('placeholderReportText');
@@ -794,6 +890,10 @@
       message: '',
       summary: 'Sube la boleta PDF para extraer el código.',
     };
+    let planillaState = {
+      files: [],
+      message: 'Selecciona uno o varios archivos de planilla para ver sus tablas.',
+    };
     let currentView = {
       mode: 'idle',
       title: '',
@@ -808,7 +908,7 @@
     const controlButtons = [
       openAntiguedadButton,
       openMarcacionesButton,
-      openAsistenciaButton,
+      openPlanillaButton,
       openVacacionesButton,
     ];
     const PDFJS_VERSION = '5.4.624';
@@ -835,6 +935,7 @@
       reportScreen.hidden = false;
       antiguedadView.hidden = false;
       marcacionesView.hidden = true;
+      planillaView.hidden = true;
       placeholderView.hidden = true;
       setActiveControlButton(activeButton);
     };
@@ -843,20 +944,165 @@
       reportScreen.hidden = false;
       antiguedadView.hidden = true;
       marcacionesView.hidden = false;
+      planillaView.hidden = true;
       placeholderView.hidden = true;
       setActiveControlButton(activeButton);
       renderMarcacionesView();
+    };
+
+    const showPlanillaReport = (activeButton = openPlanillaButton) => {
+      reportScreen.hidden = false;
+      antiguedadView.hidden = true;
+      marcacionesView.hidden = true;
+      planillaView.hidden = false;
+      placeholderView.hidden = true;
+      setActiveControlButton(activeButton);
+      renderPlanillaView();
     };
 
     const showPlaceholderReport = (title, activeButton) => {
       reportScreen.hidden = false;
       antiguedadView.hidden = true;
       marcacionesView.hidden = true;
+      planillaView.hidden = true;
       placeholderView.hidden = false;
       placeholderReportTitle.textContent = title;
       placeholderReportText.textContent = 'Este informe todavía no está construido.';
       placeholderReportBody.textContent = 'Próximamente se habilitará este informe.';
       setActiveControlButton(activeButton);
+    };
+
+    const buildPlanillaHeaders = (rows) => {
+      const headers = [];
+      const seen = new Set();
+
+      rows.forEach((row) => {
+        Object.keys(row).forEach((key) => {
+          if (!key || key.startsWith('__') || seen.has(key)) return;
+          seen.add(key);
+          headers.push(key);
+        });
+      });
+
+      return headers;
+    };
+
+    const readPlanillaFile = async (file) => {
+      const arrayBuffer = await file.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: 'array', cellDates: true });
+
+      for (const sheetName of workbook.SheetNames) {
+        const worksheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(worksheet, { defval: '', raw: false });
+
+        if (!rows.length) continue;
+
+        return {
+          fileName: file.name,
+          sheetName,
+          rows,
+          headers: buildPlanillaHeaders(rows),
+          message: '',
+        };
+      }
+
+      return {
+        fileName: file.name,
+        sheetName: '',
+        rows: [],
+        headers: [],
+        message: 'La hoja esta vacia o no se pudo leer.',
+      };
+    };
+
+    const renderPlanillaTable = (rows, headers) => {
+      if (!rows.length) {
+        return '<div class="empty">No se encontraron filas para mostrar.</div>';
+      }
+
+      const bodyHtml = rows
+        .map((row, rowIndex) => {
+          const rowClass = rowIndex % 2 === 0 ? 'dni-band-a' : 'dni-band-b';
+          const cells = headers
+            .map((header) => `<td>${escapeHtml(row[header])}</td>`)
+            .join('');
+          return `<tr class="${rowClass}">${cells}</tr>`;
+        })
+        .join('');
+
+      return `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>${headers.map((header) => `<th>${escapeHtml(header)}</th>`).join('')}</tr>
+            </thead>
+            <tbody>${bodyHtml}</tbody>
+          </table>
+        </div>
+      `;
+    };
+
+    const renderPlanillaFileCard = (fileState) => {
+      const rowCount = fileState.rows.length;
+      const fileMeta = [
+        fileState.sheetName ? `Hoja: ${fileState.sheetName}` : 'Sin hoja con datos',
+        `Filas: ${rowCount}`,
+      ].join(' | ');
+
+      if (!rowCount) {
+        return `
+          <div class="card planilla-file-card">
+            <div class="planilla-file-meta">
+              <div>
+                <strong>${escapeHtml(fileState.fileName)}</strong>
+                <span>${escapeHtml(fileMeta)}</span>
+              </div>
+              <div class="planilla-file-stats">${escapeHtml(fileState.message || 'Sin datos para mostrar.')}</div>
+            </div>
+            <div class="empty">${escapeHtml(fileState.message || 'No se encontraron filas para mostrar.')}</div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="card planilla-file-card">
+          <div class="planilla-file-meta">
+            <div>
+              <strong>${escapeHtml(fileState.fileName)}</strong>
+              <span>${escapeHtml(fileMeta)}</span>
+            </div>
+            <div class="planilla-file-stats">${escapeHtml(fileState.message || 'Archivo cargado correctamente.')}</div>
+          </div>
+          ${renderPlanillaTable(fileState.rows, fileState.headers)}
+        </div>
+      `;
+    };
+
+    const renderPlanillaView = () => {
+      const files = planillaState.files;
+      const filesWithData = files.filter((file) => file.rows.length).length;
+      const totalRows = files.reduce((sum, file) => sum + file.rows.length, 0);
+
+      if (planillaState.message) {
+        planillaStatus.textContent = planillaState.message;
+      } else {
+        const statusParts = [];
+        if (files.length) statusParts.push(`Archivos cargados: ${files.length}`);
+        if (filesWithData) statusParts.push(`Con datos: ${filesWithData}`);
+        if (totalRows) statusParts.push(`Filas totales: ${totalRows}`);
+        planillaStatus.textContent = statusParts.length
+          ? statusParts.join('\n')
+          : 'Selecciona uno o varios archivos de planilla para ver sus tablas.';
+      }
+
+      if (!files.length) {
+        planillaSummary.textContent = 'Selecciona uno o varios archivos de planilla para ver sus tablas.';
+        planillaFilesList.innerHTML = '<div class="empty">Las tablas aparecerán aquí al cargar archivos.</div>';
+        return;
+      }
+
+      planillaSummary.textContent = `Archivos: ${files.length} | Con datos: ${filesWithData} | Filas totales: ${totalRows}`;
+      planillaFilesList.innerHTML = files.map(renderPlanillaFileCard).join('');
     };
 
     const loadPdfJs = async () => {
@@ -2201,6 +2447,32 @@
       wb.title = docTitle;
       wb.subject = docTitle;
 
+      const loadLogoBase64 = async () => {
+        try {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          const base64 = await new Promise((resolve, reject) => {
+            img.onload = () => {
+              try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth || img.width;
+                canvas.height = img.naturalHeight || img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                resolve(canvas.toDataURL('image/jpeg', 1).split(',')[1]);
+              } catch (error) {
+                reject(error);
+              }
+            };
+            img.onerror = () => reject(new Error('No se pudo cargar la imagen marca_logo.jpeg.'));
+            img.src = 'marca_logo.jpeg';
+          });
+          return base64;
+        } catch {
+          return null;
+        }
+      };
+
       const ws = wb.addWorksheet('Hoja2', {
         pageSetup: {
           orientation: 'portrait',
@@ -2226,6 +2498,15 @@
       ws.getColumn(16).width = 11;
       ws.getRow(5).height = 15.75;
       ws.getRow(6).height = 19.5;
+
+      const logoBase64 = await loadLogoBase64();
+      if (logoBase64) {
+        const imageId = wb.addImage({ base64: logoBase64, extension: 'jpeg' });
+        ws.addImage(imageId, {
+          tl: { col: 1, row: 1 },
+          ext: { width: 153, height: 30 },
+        });
+      }
 
       const font = (size, bold = false) => ({
         name: 'Calibri',
@@ -2826,6 +3107,42 @@
       reconcileMarcaciones();
     });
 
+    planillaFilesInput.addEventListener('change', async (event) => {
+      const files = Array.from(event.target.files || []);
+
+      if (!files.length) {
+        planillaState.files = [];
+        planillaState.message = 'Selecciona uno o varios archivos de planilla para ver sus tablas.';
+        renderPlanillaView();
+        return;
+      }
+
+      planillaState.message = `Procesando ${files.length} archivo${files.length === 1 ? '' : 's'}...`;
+      planillaState.files = [];
+      renderPlanillaView();
+
+      const results = await Promise.all(files.map(async (file) => {
+        try {
+          return await readPlanillaFile(file);
+        } catch (error) {
+          return {
+            fileName: file.name,
+            sheetName: '',
+            rows: [],
+            headers: [],
+            message: 'Error al procesar el archivo: ' + error.message,
+          };
+        }
+      }));
+
+      planillaState.files = results;
+      const errorCount = results.filter((file) => file.message && file.rows.length === 0).length;
+      planillaState.message = errorCount
+        ? `Se cargaron ${results.length} archivo${results.length === 1 ? '' : 's'}, con ${errorCount} observacion${errorCount === 1 ? '' : 'es'}.`
+        : '';
+      renderPlanillaView();
+    });
+
     citi01Button.addEventListener('click', () => {
       setActiveFilterButton(citi01Button);
       if (!loadedRows.length) {
@@ -2895,7 +3212,7 @@
 
     openAntiguedadButton.addEventListener('click', () => showAntiguedadReport(openAntiguedadButton));
     openMarcacionesButton.addEventListener('click', () => showMarcacionesReport(openMarcacionesButton));
-    openAsistenciaButton.addEventListener('click', () => showPlaceholderReport('Asistencia', openAsistenciaButton));
+    openPlanillaButton.addEventListener('click', () => showPlanillaReport(openPlanillaButton));
     openVacacionesButton.addEventListener('click', () => showPlaceholderReport('Vacaciones', openVacacionesButton));
 
     const exportMarcacionesButton = document.getElementById('exportMarcacionesButton');
